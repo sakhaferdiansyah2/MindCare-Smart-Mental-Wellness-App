@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCare – Smart Mental Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --primary: #7C5CBF;
+  --primary-light: #9B7FD4;
+  --primary-dark: #5A3F9A;
+  --secondary: #5BA4CF;
+  --accent: #F6A623;
+  --success: #4CAF84;
+  --danger: #E86060;
+  --warning: #F6A623;
+  --bg-dark: #1A1333;
+  --bg-card: #241B45;
+  --bg-card2: #2D2255;
+  --text-light: #E8E0FF;
+  --text-muted: #9B8FBB;
+  --purple-grad: linear-gradient(135deg, #7C5CBF 0%, #5BA4CF 100%);
+  --card-radius: 20px;
+  --shadow: 0 8px 32px rgba(124,92,191,0.18);
+  --shadow-hover: 0 16px 48px rgba(124,92,191,0.30);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: var(--text-light); min-height: 100vh; overflow-x: hidden; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+/* ===== AUTH SCREENS ===== */
+.auth-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-dark); position: fixed; inset: 0; z-index: 300;
+  padding: 20px;
+}
+.auth-card {
+  background: var(--bg-card); border-radius: 24px; padding: 40px;
+  width: 100%; max-width: 420px;
+  border: 1px solid rgba(124,92,191,0.2);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  animation: slideUp 0.4s ease;
+}
+@keyframes slideUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+.auth-logo { text-align: center; margin-bottom: 28px; }
+.auth-logo .logo-icon { font-size: 44px; display: block; margin-bottom: 8px; }
+.auth-logo .logo-name { font-size: 26px; font-weight: 800; }
+.auth-logo .logo-name span { color: var(--primary-light); }
+.auth-logo .logo-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+.auth-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.auth-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block; font-weight: 500; }
+.form-input {
+  width: 100%; background: var(--bg-card2); border: 1.5px solid rgba(124,92,191,0.2);
+  color: var(--text-light); border-radius: 12px; padding: 12px 16px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; outline: none; transition: border 0.2s;
+}
+.form-input:focus { border-color: var(--primary); }
+.form-input::placeholder { color: var(--text-muted); }
+.form-input.error { border-color: var(--danger); }
+.form-error { font-size: 11px; color: var(--danger); margin-top: 4px; display: none; }
+.form-error.show { display: block; }
+.input-wrap { position: relative; }
+.input-wrap .toggle-pw { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; }
+.btn-auth {
+  width: 100%; background: var(--purple-grad); color: #fff; border: none;
+  padding: 13px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+  font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s;
+  margin-top: 8px; position: relative;
+}
+.btn-auth:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-auth:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted); }
+.auth-switch a { color: var(--primary-light); cursor: pointer; font-weight: 600; }
+.auth-switch a:hover { text-decoration: underline; }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; }
+.auth-divider::before, .auth-divider::after { content:''; flex:1; height:1px; background: rgba(124,92,191,0.2); }
+.auth-divider span { font-size: 11px; color: var(--text-muted); }
+.strength-bar { display: flex; gap: 4px; margin-top: 6px; }
+.strength-seg { height: 3px; flex: 1; border-radius: 2px; background: rgba(124,92,191,0.15); transition: background 0.3s; }
+.strength-label { font-size: 10px; margin-top: 3px; }
+.avatar-picker { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.avatar-opt {
+  width: 46px; height: 46px; border-radius: 50%; background: var(--bg-card2);
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+}
+.avatar-opt:hover, .avatar-opt.selected { border-color: var(--primary); background: rgba(124,92,191,0.2); }
+.mood-check-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.mood-check {
+  padding: 7px 14px; border-radius: 20px; background: var(--bg-card2);
+  border: 1.5px solid transparent; cursor: pointer; font-size: 12px;
+  transition: all 0.2s;
+}
+.mood-check:hover, .mood-check.selected { border-color: var(--primary); background: rgba(124,92,191,0.15); color: var(--primary-light); }
+.onboard-step { display: none; }
+.onboard-step.active { display: block; animation: slideUp 0.3s ease; }
+.step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(124,92,191,0.3); transition: all 0.3s; }
+.step-dot.active { background: var(--primary); width: 22px; border-radius: 4px; }
+
+/* ===== APP LAYOUT ===== */
+.app-wrapper { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 260px; background: var(--bg-card); padding: 28px 0;
+  display: flex; flex-direction: column; position: fixed;
+  top: 0; left: 0; height: 100vh; z-index: 100;
+  border-right: 1px solid rgba(124,92,191,0.15); transition: transform 0.3s;
+  overflow-y: auto;
+}
+.sidebar-logo { display: flex; align-items: center; gap: 12px; padding: 0 24px 24px; border-bottom: 1px solid rgba(124,92,191,0.15); margin-bottom: 12px; }
+.logo-icon-sm { width: 44px; height: 44px; background: var(--purple-grad); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.logo-text { font-size: 20px; font-weight: 700; }
+.logo-text span { color: var(--primary-light); }
+.logo-sub-sm { font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
+.nav-section { padding: 8px 16px 4px; font-size: 10px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px; padding: 11px 24px;
+  cursor: pointer; border-radius: 0 14px 14px 0; margin: 2px 12px 2px 0;
+  font-size: 13.5px; font-weight: 500; color: var(--text-muted);
+  transition: all 0.2s; position: relative;
+}
+.nav-item:hover { background: rgba(124,92,191,0.12); color: var(--text-light); }
+.nav-item.active { background: rgba(124,92,191,0.22); color: var(--primary-light); }
+.nav-item.active::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:4px; height:24px; background:var(--primary); border-radius:0 4px 4px 0; }
+.nav-icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-badge { margin-left: auto; background: var(--primary); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+.sidebar-bottom { margin-top: auto; padding: 16px 24px; border-top: 1px solid rgba(124,92,191,0.15); }
+.user-mini { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.avatar-sm { width: 36px; height: 36px; border-radius: 50%; background: var(--purple-grad); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; }
+.user-mini-info { font-size: 13px; font-weight: 600; }
+.user-mini-sub { font-size: 11px; color: var(--text-muted); }
+.main-content { margin-left: 260px; flex: 1; min-height: 100vh; padding: 32px 36px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.topbar-title { font-size: 22px; font-weight: 700; }
+.topbar-title span { color: var(--primary-light); }
+.topbar-actions { display: flex; gap: 12px; align-items: center; }
+.btn-icon { width: 40px; height: 40px; background: var(--bg-card); border: 1px solid rgba(124,92,191,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; position: relative; }
+.btn-icon:hover { background: rgba(124,92,191,0.2); color: var(--primary-light); }
+.notif-dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-dark); }
+
+/* ===== CARDS ===== */
+.card-mc { background: var(--bg-card); border-radius: var(--card-radius); border: 1px solid rgba(124,92,191,0.12); box-shadow: var(--shadow); padding: 22px; transition: all 0.25s; }
+.card-mc:hover { box-shadow: var(--shadow-hover); }
+.card-grad { background: var(--purple-grad); border-radius: var(--card-radius); padding: 24px; position: relative; overflow: hidden; }
+.card-grad::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; background:rgba(255,255,255,0.08); border-radius:50%; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.35s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+
+/* ===== COMMON COMPONENTS ===== */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 24px; }
+.stat-card { background: var(--bg-card); border-radius: var(--card-radius); padding: 20px; border: 1px solid rgba(124,92,191,0.12); transition: all 0.25s; }
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px; }
+.stat-val { font-size: 26px; font-weight: 700; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.stat-trend { font-size: 11px; margin-top: 6px; }
+.stat-trend.up { color: var(--success); }
+.mood-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0; }
+.mood-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 18px; background: var(--bg-card2); border-radius: 16px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; font-size: 12px; }
+.mood-btn:hover, .mood-btn.selected { border-color: var(--primary); background: rgba(124,92,191,0.15); }
+.mood-emoji { font-size: 26px; }
+.prog-bar-wrap { height: 8px; background: rgba(124,92,191,0.15); border-radius: 10px; overflow: hidden; margin: 6px 0; }
+.prog-bar { height: 100%; border-radius: 10px; background: var(--purple-grad); transition: width 0.8s ease; }
+.prog-bar.green { background: linear-gradient(90deg, #4CAF84, #2ECC71); }
+.prog-bar.orange { background: linear-gradient(90deg, #F6A623, #FF6B35); }
+.prog-bar.red { background: linear-gradient(90deg, #E86060, #C0392B); }
+.prog-bar.blue { background: linear-gradient(90deg, #5BA4CF, #2980B9); }
+.btn-primary-mc { background: var(--purple-grad); color: #fff; border: none; padding: 12px 28px; border-radius: 50px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; width: 100%; }
+.btn-primary-mc:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-outline-mc { background: transparent; color: var(--primary-light); border: 1.5px solid var(--primary); padding: 10px 24px; border-radius: 50px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.btn-outline-mc:hover { background: rgba(124,92,191,0.15); }
+.btn-sm-mc { background: rgba(124,92,191,0.2); color: var(--primary-light); border: none; padding: 7px 18px; border-radius: 50px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.2s; }
+.btn-sm-mc:hover { background: rgba(124,92,191,0.35); }
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.section-title span { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: auto; cursor: pointer; }
+.section-title span:hover { color: var(--primary-light); }
+.input-mc { background: var(--bg-card2); border: 1.5px solid rgba(124,92,191,0.2); color: var(--text-light); border-radius: 12px; padding: 11px 16px; font-family: 'Poppins', sans-serif; font-size: 13px; outline: none; width: 100%; transition: border 0.2s; }
+.input-mc:focus { border-color: var(--primary); }
+.input-mc::placeholder { color: var(--text-muted); }
+.label-mc { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; display: block; }
+.tab-row { display: flex; gap: 4px; background: var(--bg-card2); padding: 4px; border-radius: 14px; margin-bottom: 20px; }
+.tab-btn { flex: 1; padding: 9px; text-align: center; font-size: 12.5px; font-weight: 500; border-radius: 10px; cursor: pointer; color: var(--text-muted); background: none; border: none; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+.tab-btn.active { background: var(--primary); color: #fff; }
+.info-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.badge-purple { background: rgba(124,92,191,0.2); color: var(--primary-light); }
+.badge-blue { background: rgba(91,164,207,0.2); color: var(--secondary); }
+.badge-green { background: rgba(76,175,132,0.2); color: var(--success); }
+.badge-orange { background: rgba(246,166,35,0.2); color: var(--warning); }
+.badge-red { background: rgba(232,96,96,0.2); color: var(--danger); }
+.badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ===== ASSESSMENT ===== */
+.assessment-option { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-card2); border-radius: 14px; margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+.assessment-option:hover, .assessment-option.selected { border-color: var(--primary); background: rgba(124,92,191,0.15); }
+.radio-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-muted); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.assessment-option.selected .radio-dot { border-color: var(--primary); background: var(--primary); }
+.assessment-option.selected .radio-dot::after { content:''; width:8px; height:8px; background:#fff; border-radius:50%; }
+.assess-progress-bar { height: 5px; background: rgba(124,92,191,0.15); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.assess-progress-fill { height: 100%; background: var(--purple-grad); transition: width 0.5s; }
+.score-circle-wrap { display: flex; justify-content: center; margin: 20px 0; }
+.score-circle { width: 140px; height: 140px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 40px rgba(124,92,191,0.3); }
+.score-circle::after { content:''; position:absolute; width:108px; height:108px; background:var(--bg-dark); border-radius:50%; }
+.score-inner { position: relative; z-index: 2; text-align: center; }
+.score-num { font-size: 34px; font-weight: 800; }
+.score-label { font-size: 11px; color: var(--text-muted); }
+
+/* ===== TIMER ===== */
+.timer-circle { width: 200px; height: 200px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 0 60px rgba(124,92,191,0.25); position: relative; transition: background 0.3s; }
+.timer-circle::after { content:''; position:absolute; width:165px; height:165px; background:var(--bg-dark); border-radius:50%; }
+.timer-inner { position: relative; z-index: 2; text-align: center; }
+.timer-digits { font-size: 42px; font-weight: 700; letter-spacing: 2px; }
+.timer-text { font-size: 11px; color: var(--text-muted); }
+
+/* ===== WEEK CHART ===== */
+.week-chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 100px; padding-bottom: 4px; }
+.week-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.week-bar { width: 100%; border-radius: 6px 6px 0 0; transition: height 0.6s ease; cursor: pointer; }
+.week-bar:hover { opacity: 0.8; }
+.week-bar.today { background: var(--purple-grad); }
+.week-label { font-size: 10px; color: var(--text-muted); }
+.week-val { font-size: 9px; color: var(--text-muted); }
+
+/* ===== EXERCISE ===== */
+.exercise-item { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg-card2); border-radius: 14px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+.exercise-item:hover { border-color: rgba(124,92,191,0.3); transform: translateX(4px); }
+.exercise-icon-box { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.exercise-info { flex: 1; }
+.exercise-title { font-size: 14px; font-weight: 600; }
+.exercise-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ===== ARTICLES ===== */
+.article-card { background: var(--bg-card2); border-radius: 16px; overflow: hidden; margin-bottom: 14px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; display: flex; align-items: center; }
+.article-card:hover { border-color: rgba(124,92,191,0.3); transform: translateX(4px); }
+.article-tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.tag-stress { background: rgba(230,100,100,0.2); color: #E86060; }
+.tag-anxiety { background: rgba(246,166,35,0.2); color: #F6A623; }
+.tag-mood { background: rgba(91,164,207,0.2); color: var(--secondary); }
+.tag-mindfulness { background: rgba(76,175,132,0.2); color: var(--success); }
+.tag-self-love { background: rgba(124,92,191,0.2); color: var(--primary-light); }
+.tag-burnout { background: rgba(255,100,100,0.2); color: #FF6464; }
+.article-emoji { width: 80px; height: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 34px; background: rgba(124,92,191,0.1); }
+.article-body { padding: 14px; flex: 1; }
+.article-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.article-meta { font-size: 11px; color: var(--text-muted); }
+
+/* ===== CHAT ===== */
+.chat-container { display: flex; flex-direction: column; height: calc(100vh - 200px); }
+.chat-messages { flex: 1; overflow-y: auto; padding: 12px 0; }
+.chat-msg { display: flex; margin-bottom: 14px; }
+.chat-msg.bot { flex-direction: row; }
+.chat-msg.user { flex-direction: row-reverse; }
+.chat-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.chat-avatar.bot-av { background: var(--purple-grad); margin-right: 10px; }
+.chat-avatar.user-av { background: var(--bg-card2); margin-left: 10px; }
+.chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 18px; font-size: 13.5px; line-height: 1.6; }
+.chat-bubble.bot-bubble { background: var(--bg-card2); border-bottom-left-radius: 4px; }
+.chat-bubble.user-bubble { background: var(--purple-grad); border-bottom-right-radius: 4px; }
+.chat-input-row { display: flex; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(124,92,191,0.15); }
+.chat-input { flex: 1; background: var(--bg-card2); border: 1.5px solid rgba(124,92,191,0.2); color: var(--text-light); border-radius: 50px; padding: 12px 20px; font-family: 'Poppins', sans-serif; font-size: 13px; outline: none; transition: border 0.2s; }
+.chat-input:focus { border-color: var(--primary); }
+.chat-send-btn { width: 46px; height: 46px; background: var(--purple-grad); border: none; border-radius: 50%; color: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.chat-send-btn:hover { opacity: 0.85; transform: scale(1.05); }
+.chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.typing-indicator { display: none; }
+.typing-indicator.show { display: flex; align-items: center; gap: 4px; padding: 8px 14px; }
+.typing-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary-light); animation: typingAnim 1.2s infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingAnim { 0%,80%,100%{transform:scale(0.7);opacity:0.4;}40%{transform:scale(1);opacity:1;} }
+.quick-suggestions { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 10px; }
+.quick-chip { padding: 6px 14px; border-radius: 20px; background: var(--bg-card2); border: 1px solid rgba(124,92,191,0.2); font-size: 12px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+.quick-chip:hover { border-color: var(--primary); color: var(--primary-light); }
+
+/* ===== COMMUNITY ===== */
+.community-post { background: var(--bg-card2); border-radius: 16px; padding: 16px; margin-bottom: 14px; border: 1px solid rgba(124,92,191,0.1); transition: all 0.2s; }
+.community-post:hover { border-color: rgba(124,92,191,0.3); }
+.post-author { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.post-anon { width: 34px; height: 34px; border-radius: 50%; background: var(--bg-card); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+.post-name { font-size: 13px; font-weight: 600; }
+.post-time { font-size: 11px; color: var(--text-muted); }
+.post-content { font-size: 13.5px; line-height: 1.7; color: var(--text-light); margin-bottom: 10px; }
+.post-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.post-tag { padding: 3px 12px; border-radius: 20px; font-size: 11px; background: rgba(124,92,191,0.15); color: var(--primary-light); cursor: pointer; }
+.post-actions { display: flex; gap: 16px; }
+.post-action-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; background: none; border: none; font-family: 'Poppins', sans-serif; }
+.post-action-btn:hover { color: var(--primary-light); }
+.post-action-btn.liked { color: var(--danger); }
+.post-form-wrap { background: var(--bg-card2); border-radius: 16px; padding: 18px; margin-bottom: 20px; border: 1px solid rgba(124,92,191,0.15); }
+.post-textarea { width: 100%; background: transparent; border: none; color: var(--text-light); font-family: 'Poppins', sans-serif; font-size: 13.5px; resize: none; outline: none; min-height: 80px; line-height: 1.7; }
+.post-textarea::placeholder { color: var(--text-muted); }
+
+/* ===== PROFILE ===== */
+.profile-header { background: var(--purple-grad); border-radius: var(--card-radius); padding: 28px; text-align: center; position: relative; overflow: hidden; margin-bottom: 20px; }
+.profile-avatar-big { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.4); }
+.achievement-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+.achievement-item { background: var(--bg-card2); border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+.achievement-item:hover { border-color: var(--primary); }
+.achievement-item.locked { opacity: 0.4; filter: grayscale(1); }
+.achievement-icon { font-size: 28px; margin-bottom: 6px; }
+.achievement-name { font-size: 10px; color: var(--text-muted); }
+.setting-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--bg-card2); border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+.setting-item:hover { border-color: rgba(124,92,191,0.3); }
+.setting-left { display: flex; align-items: center; gap: 12px; }
+.setting-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.setting-label { font-size: 13.5px; font-weight: 500; }
+.setting-sub { font-size: 11px; color: var(--text-muted); }
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider-toggle { position: absolute; cursor: pointer; top:0;left:0;right:0;bottom:0; background: rgba(124,92,191,0.3); border-radius: 24px; transition: .3s; }
+.slider-toggle:before { position:absolute;content:'';height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s; }
+input:checked + .slider-toggle { background: var(--primary); }
+input:checked + .slider-toggle:before { transform: translateX(20px); }
+
+/* ===== CALENDAR ===== */
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; }
+.cal-header { font-size: 11px; color: var(--text-muted); text-align: center; padding: 4px 0; }
+.cal-day { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; transition: all 0.2s; background: transparent; border: 1.5px solid transparent; position: relative; }
+.cal-day:hover { background: rgba(124,92,191,0.15); }
+.cal-day.today { background: var(--primary); color: #fff; font-weight: 700; }
+.cal-day.has-data { border-color: var(--primary-light); }
+.cal-day.empty { cursor: default; }
+
+/* ===== JOURNAL HISTORY ===== */
+.journal-entry { background: var(--bg-card2); border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(124,92,191,0.1); }
+.journal-date { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+.journal-text { font-size: 13px; line-height: 1.7; }
+.journal-mood-tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; background: rgba(124,92,191,0.15); color: var(--primary-light); margin-top: 8px; }
+
+/* ===== MOOD TRACKER ===== */
+.mood-history-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--bg-card2); border-radius: 12px; margin-bottom: 8px; }
+.mood-history-icon { font-size: 24px; }
+.mood-history-info { flex: 1; }
+.mood-history-label { font-size: 13px; font-weight: 600; }
+.mood-history-time { font-size: 11px; color: var(--text-muted); }
+.mood-history-note { font-size: 12px; color: var(--text-muted); margin-top: 2px; font-style: italic; }
+
+/* ===== NOTIF ===== */
+.notif-toast { position: fixed; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid rgba(124,92,191,0.3); border-radius: 14px; padding: 14px 18px; z-index: 9999; max-width: 300px; box-shadow: var(--shadow-hover); transform: translateX(120%); transition: transform 0.3s; display: flex; gap: 12px; align-items: flex-start; }
+.notif-toast.show { transform: translateX(0); }
+.notif-icon { font-size: 20px; margin-top: 2px; }
+.notif-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.notif-body { font-size: 12px; color: var(--text-muted); }
+
+/* ===== MODAL ===== */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 400; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: var(--bg-card); border-radius: 20px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 28px; position: relative; animation: slideUp 0.3s ease; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: rgba(124,92,191,0.2); border: none; color: var(--text-light); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+
+/* ===== BREATHING EXERCISE ===== */
+.breathing-circle { width: 180px; height: 180px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: rgba(124,92,191,0.2); border: 3px solid var(--primary); transition: transform 4s ease-in-out; position: relative; }
+.breathing-circle.expand { transform: scale(1.4); background: rgba(124,92,191,0.3); }
+.breathing-circle.hold { transform: scale(1.4); }
+.breathing-circle.exhale { transform: scale(1); background: rgba(124,92,191,0.1); }
+.breathing-text { font-size: 14px; font-weight: 600; text-align: center; }
+.breathing-count { font-size: 32px; font-weight: 800; color: var(--primary-light); }
+
+/* ===== GRATITUDE ===== */
+.gratitude-input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+.gratitude-number { width: 32px; height: 32px; border-radius: 50%; background: var(--purple-grad); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 8px; }
+.gratitude-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--bg-card2); border-radius: 12px; margin-bottom: 8px; }
+.gratitude-item .gi-emoji { font-size: 20px; }
+.gratitude-item .gi-text { font-size: 13px; flex: 1; }
+.gratitude-item .gi-date { font-size: 10px; color: var(--text-muted); }
+
+/* ===== BREATHING GUIDE ===== */
+.breath-step { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--bg-card2); border-radius: 12px; margin-bottom: 8px; }
+.breath-step-num { width: 30px; height: 30px; border-radius: 50%; background: rgba(124,92,191,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.breath-step-label { font-size: 13px; font-weight: 600; }
+.breath-step-sub { font-size: 11px; color: var(--text-muted); }
+
+/* ===== RESPONSIVE ===== */
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+.sidebar-overlay.show { display: block; }
+.sidebar-toggle { display: none; }
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 20px 18px; }
+  .sidebar-toggle { display: flex; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .achievement-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 650px) {
+  .two-col-grid { grid-template-columns: 1fr !important; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .topbar-title { font-size: 18px; }
+  .main-content { padding: 16px 14px; }
+}
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+@keyframes breathIn { 0%{transform:scale(1);}100%{transform:scale(1.4);} }
+@keyframes breathOut { 0%{transform:scale(1.4);}100%{transform:scale(1);} }
+</style>
+</head>
+<body>
+
+<!-- ===== AUTH: LOGIN ===== -->
+<div class="auth-screen" id="loginScreen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="logo-icon">🧠</span>
+      <div class="logo-name">Mind<span>Care</span></div>
+      <div class="logo-sub">Smart Mental Wellness</div>
+    </div>
+    <div class="auth-title">Selamat Datang Kembali 👋</div>
+    <div class="auth-sub">Masuk untuk melanjutkan perjalanan kesehatan mentalmu</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="loginEmail" type="email" placeholder="email@kamu.com">
+      <div class="form-error" id="loginEmailErr">Email tidak valid</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="input-wrap">
+        <input class="form-input" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="toggle-pw" onclick="togglePw('loginPass',this)"><i class="fas fa-eye"></i></button>
+      </div>
+      <div class="form-error" id="loginPassErr">Password salah</div>
+    </div>
+    <div style="text-align:right;margin-bottom:8px;">
+      <span style="font-size:12px;color:var(--primary-light);cursor:pointer;" onclick="showForgot()">Lupa password?</span>
+    </div>
+    <button class="btn-auth" onclick="doLogin()" id="loginBtn">Masuk</button>
+    <div class="auth-divider"><span>atau</span></div>
+    <div class="auth-switch">Belum punya akun? <a onclick="showRegister()">Daftar sekarang</a></div>
+  </div>
+</div>
+
+<!-- ===== AUTH: REGISTER ===== -->
+<div class="auth-screen" id="registerScreen" style="display:none;">
+  <div class="auth-card" style="max-width:480px;">
+    <div class="auth-logo">
+      <span class="logo-icon">🧠</span>
+      <div class="logo-name">Mind<span>Care</span></div>
+    </div>
+    <!-- Step dots -->
+    <div class="step-dots" id="stepDots">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+
+    <!-- Step 1: Basic Info -->
+    <div class="onboard-step active" id="step1">
+      <div class="auth-title">Buat Akunmu 🎉</div>
+      <div class="auth-sub">Langkah 1 dari 3 — Data diri</div>
+      <div class="form-group">
+        <label class="form-label">Nama Lengkap</label>
+        <input class="form-input" id="regName" placeholder="Nama kamu">
+        <div class="form-error" id="regNameErr">Nama wajib diisi</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="regEmail" type="email" placeholder="email@kamu.com">
+        <div class="form-error" id="regEmailErr">Email tidak valid</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <input class="form-input" id="regPass" type="password" placeholder="Min 8 karakter" oninput="checkStrength(this.value)">
+          <button class="toggle-pw" onclick="togglePw('regPass',this)"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="strength-bar" id="strengthBar"><div class="strength-seg"></div><div class="strength-seg"></div><div class="strength-seg"></div><div class="strength-seg"></div></div>
+        <div class="strength-label" id="strengthLabel" style="color:var(--text-muted);font-size:11px;"></div>
+        <div class="form-error" id="regPassErr">Min 8 karakter, huruf besar, angka</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Konfirmasi Password</label>
+        <div class="input-wrap">
+          <input class="form-input" id="regPass2" type="password" placeholder="Ulangi password">
+          <button class="toggle-pw" onclick="togglePw('regPass2',this)"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="form-error" id="regPass2Err">Password tidak cocok</div>
+      </div>
+      <button class="btn-auth" onclick="nextStep(2)">Lanjut →</button>
+    </div>
+
+    <!-- Step 2: Avatar & Profil -->
+    <div class="onboard-step" id="step2">
+      <div class="auth-title">Pilih Avatarmu ✨</div>
+      <div class="auth-sub">Langkah 2 dari 3 — Personalisasi profil</div>
+      <div class="form-group">
+        <label class="form-label">Pilih Avatar</label>
+        <div class="avatar-picker" id="avatarPicker">
+          <div class="avatar-opt selected" data-avatar="🌸" onclick="selectAvatar(this)">🌸</div>
+          <div class="avatar-opt" data-avatar="🌙" onclick="selectAvatar(this)">🌙</div>
+          <div class="avatar-opt" data-avatar="⭐" onclick="selectAvatar(this)">⭐</div>
+          <div class="avatar-opt" data-avatar="🌻" onclick="selectAvatar(this)">🌻</div>
+          <div class="avatar-opt" data-avatar="🦋" onclick="selectAvatar(this)">🦋</div>
+          <div class="avatar-opt" data-avatar="🌈" onclick="selectAvatar(this)">🌈</div>
+          <div class="avatar-opt" data-avatar="🔮" onclick="selectAvatar(this)">🔮</div>
+          <div class="avatar-opt" data-avatar="🧸" onclick="selectAvatar(this)">🧸</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bio Singkat (opsional)</label>
+        <textarea class="form-input" id="regBio" style="resize:none;min-height:70px;" placeholder="Ceritakan sedikit tentang dirimu..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tanggal Lahir (opsional)</label>
+        <input class="form-input" id="regDob" type="date">
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-mc" onclick="nextStep(1)" style="flex:1;">← Kembali</button>
+        <button class="btn-auth" onclick="nextStep(3)" style="flex:2;">Lanjut →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Goals -->
+    <div class="onboard-step" id="step3">
+      <div class="auth-title">Tujuanmu Apa? 🎯</div>
+      <div class="auth-sub">Langkah 3 dari 3 — Pilih fokus kesehatanmu (boleh lebih dari satu)</div>
+      <div class="form-group">
+        <label class="form-label">Saya ingin...</label>
+        <div class="mood-check-list" id="goalsList">
+          <div class="mood-check selected" onclick="toggleGoal(this)">😌 Kurangi Stres</div>
+          <div class="mood-check" onclick="toggleGoal(this)">😴 Tidur Lebih Baik</div>
+          <div class="mood-check" onclick="toggleGoal(this)">💪 Lebih Percaya Diri</div>
+          <div class="mood-check" onclick="toggleGoal(this)">🧘 Belajar Meditasi</div>
+          <div class="mood-check" onclick="toggleGoal(this)">💜 Self-Love</div>
+          <div class="mood-check" onclick="toggleGoal(this)">😰 Atasi Kecemasan</div>
+          <div class="mood-check" onclick="toggleGoal(this)">📔 Journaling</div>
+          <div class="mood-check" onclick="toggleGoal(this)">🔋 Tingkatkan Energi</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bagaimana kondisi mentalmu saat ini?</label>
+        <div class="mood-check-list" id="currentMoodList">
+          <div class="mood-check selected" onclick="toggleSingleMood(this)">😊 Baik-baik saja</div>
+          <div class="mood-check" onclick="toggleSingleMood(this)">😐 Biasa saja</div>
+          <div class="mood-check" onclick="toggleSingleMood(this)">😔 Agak kurang baik</div>
+          <div class="mood-check" onclick="toggleSingleMood(this)">😢 Butuh bantuan</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-outline-mc" onclick="nextStep(2)" style="flex:1;">← Kembali</button>
+        <button class="btn-auth" onclick="doRegister()" style="flex:2;">Mulai Perjalanan 🚀</button>
+      </div>
+    </div>
+    <div class="auth-switch" style="margin-top:16px;">Sudah punya akun? <a onclick="showLogin()">Masuk</a></div>
+  </div>
+</div>
+
+<!-- ===== FORGOT PASSWORD ===== -->
+<div class="auth-screen" id="forgotScreen" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-logo"><span class="logo-icon">🔑</span></div>
+    <div class="auth-title">Reset Password</div>
+    <div class="auth-sub">Masukkan emailmu dan kami akan kirim link reset password.</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="forgotEmail" type="email" placeholder="email@kamu.com">
+      <div class="form-error" id="forgotEmailErr">Email tidak ditemukan</div>
+    </div>
+    <button class="btn-auth" onclick="doForgot()">Kirim Link Reset</button>
+    <div class="auth-switch" style="margin-top:16px;"><a onclick="showLogin()">← Kembali ke Login</a></div>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== MAIN APP ===== -->
+<div class="app-wrapper" id="appWrapper" style="display:none;">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon-sm">🧠</div>
+      <div>
+        <div class="logo-text">Mind<span>Care</span></div>
+        <div class="logo-sub-sm">Smart Mental Wellness</div>
+      </div>
+    </div>
+    <div class="nav-section">Menu Utama</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">🏠</span>Dashboard</div>
+    <div class="nav-item" onclick="showPage('moodtracker',this)"><span class="nav-icon">📈</span>Mood Tracker</div>
+    <div class="nav-item" onclick="showPage('assessment',this)"><span class="nav-icon">📋</span>Self Assessment</div>
+    <div class="nav-item" onclick="showPage('exercise',this)"><span class="nav-icon">🧘</span>Daily Exercise</div>
+    <div class="nav-section">Edukasi & Dukungan</div>
+    <div class="nav-item" onclick="showPage('gratitude',this)"><span class="nav-icon">🙏</span>Gratitude Journal <span class="nav-badge">Baru</span></div>
+    <div class="nav-item" onclick="showPage('materi',this)"><span class="nav-icon">📚</span>Materi & Panduan</div>
+    <div class="nav-item" onclick="showPage('aichat',this)"><span class="nav-icon">🤖</span>AI Assistant</div>
+    <div class="nav-item" onclick="showPage('community',this)"><span class="nav-icon">💬</span>Komunitas</div>
+    <div class="nav-section">Akun</div>
+    <div class="nav-item" onclick="showPage('profile',this)"><span class="nav-icon">👤</span>Profil & Pengaturan</div>
+    <div class="sidebar-bottom">
+      <div class="user-mini" onclick="showPage('profile',null)">
+        <div class="avatar-sm" id="sidebarAvatar">🌸</div>
+        <div>
+          <div class="user-mini-info" id="sidebarName">Pengguna</div>
+          <div class="user-mini-sub" id="sidebarStreak">🔥 0 hari streak</div>
+        </div>
+        <i class="fas fa-chevron-right" style="margin-left:auto;font-size:11px;color:var(--text-muted);"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="btn-icon sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <div>
+          <div class="topbar-title" id="pageTitle">Dashboard 👋</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:1px;" id="pageSubtitle">Semangat untuk hari ini!</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div class="btn-icon" onclick="openNotifPanel()" id="notifBell"><i class="fas fa-bell"></i><div class="notif-dot" id="notifDot"></div></div>
+        <div class="btn-icon" onclick="showPage('aichat',null)"><i class="fas fa-robot"></i></div>
+        <div class="btn-icon" onclick="showPage('profile',null)" style="background:var(--purple-grad);color:#fff;font-size:18px;" id="topbarAvatar">🌸</div>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="card-grad" style="margin-bottom:22px;">
+        <div style="font-size:13px;opacity:0.85;margin-bottom:4px;" id="dashGreeting">Selamat pagi!</div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div>
+            <div style="font-size:40px;font-weight:800;line-height:1;" id="dashScore">7.5</div>
+            <div style="font-size:14px;font-weight:600;margin-top:2px;" id="dashMoodLabel">Baik 😊</div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:12px;opacity:0.8;line-height:1.6;" id="dashMoodText">Pertahankan keadaan mental yang positif! Kamu sedang dalam jalur yang tepat.</div>
+          </div>
+          <div style="font-size:48px;opacity:0.4;position:absolute;right:20px;bottom:10px;">🌟</div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:16px;" id="dashMoodSubs">
+          <div style="text-align:center;"><div style="font-size:18px;">😊</div><div style="font-size:10px;opacity:0.8;margin-top:2px;">Mood</div></div>
+          <div style="text-align:center;"><div style="font-size:18px;">😌</div><div style="font-size:10px;opacity:0.8;margin-top:2px;">Stres</div></div>
+          <div style="text-align:center;"><div style="font-size:18px;">⚡</div><div style="font-size:10px;opacity:0.8;margin-top:2px;">Energi</div></div>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,92,191,0.2);">🔥</div>
+          <div class="stat-val" id="statStreak">0</div>
+          <div class="stat-label">Hari Aktif Streak</div>
+          <div class="stat-trend up"><i class="fas fa-star" style="color:var(--warning);"></i> Terus semangat!</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(76,175,132,0.2);">🧘</div>
+          <div class="stat-val" id="statExercise">0</div>
+          <div class="stat-label">Latihan Selesai</div>
+          <div class="stat-trend up"><i class="fas fa-arrow-up"></i> Total bulan ini</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(246,166,35,0.2);">📊</div>
+          <div class="stat-val" id="statAssessScore">—</div>
+          <div class="stat-label">Skor Assessment</div>
+          <div class="stat-trend up"><i class="fas fa-clipboard-list"></i> Terakhir diambil</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(91,164,207,0.2);">📔</div>
+          <div class="stat-val" id="statJournals">0</div>
+          <div class="stat-label">Entri Jurnal</div>
+          <div class="stat-trend up"><i class="fas fa-pen"></i> Total catatan</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;" class="two-col-grid">
+        <div class="card-mc">
+          <div class="section-title">Rekomendasi Untukmu <span onclick="showPage('exercise',null)">Lihat semua</span></div>
+          <div class="exercise-item" onclick="startMeditationTimer('Latihan Pernapasan',3*60,'exercise')">
+            <div class="exercise-icon-box" style="background:rgba(124,92,191,0.2);">🫁</div>
+            <div class="exercise-info"><div class="exercise-title">Latihan Pernapasan</div><div class="exercise-sub">3 menit · Stres Ringan</div></div>
+            <button class="btn-sm-mc">Mulai</button>
+          </div>
+          <div class="exercise-item" onclick="startMeditationTimer('Meditasi Singkat',5*60,'exercise')">
+            <div class="exercise-icon-box" style="background:rgba(76,175,132,0.2);">🧘</div>
+            <div class="exercise-info"><div class="exercise-title">Meditasi Singkat</div><div class="exercise-sub">5 menit · Mindfulness</div></div>
+            <button class="btn-sm-mc">Mulai</button>
+          </div>
+          <div class="exercise-item" onclick="showPage('gratitude',null)">
+            <div class="exercise-icon-box" style="background:rgba(246,166,35,0.2);">🙏</div>
+            <div class="exercise-info"><div class="exercise-title">Jurnal Syukur</div><div class="exercise-sub">5 menit · Gratitude</div></div>
+            <button class="btn-sm-mc">Mulai</button>
+          </div>
+        </div>
+        <div class="card-mc">
+          <div class="section-title">Mood Minggu Ini</div>
+          <div class="week-chart-bars" id="dashMoodChart" style="height:80px;"></div>
+          <div style="margin-top:14px;" id="dashProgressBars">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--text-muted);">Stres</span><span id="dashStressVal" style="font-weight:600;">—</span></div>
+            <div class="prog-bar-wrap"><div class="prog-bar orange" id="dashStressBar" style="width:0%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;margin-top:8px;"><span style="color:var(--text-muted);">Mood Positif</span><span id="dashMoodVal" style="font-weight:600;">—</span></div>
+            <div class="prog-bar-wrap"><div class="prog-bar green" id="dashMoodBar" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-mc">
+        <div class="section-title">Bagaimana perasaanmu sekarang?</div>
+        <div class="mood-row" id="dashboardMoodRow">
+          <div class="mood-btn" onclick="selectDashMood(this,'Sangat Baik',5)"><div class="mood-emoji">😄</div><div>Sangat Baik</div></div>
+          <div class="mood-btn" onclick="selectDashMood(this,'Baik',4)"><div class="mood-emoji">😊</div><div>Baik</div></div>
+          <div class="mood-btn" onclick="selectDashMood(this,'Biasa Saja',3)"><div class="mood-emoji">😐</div><div>Biasa Saja</div></div>
+          <div class="mood-btn" onclick="selectDashMood(this,'Buruk',2)"><div class="mood-emoji">😔</div><div>Buruk</div></div>
+          <div class="mood-btn" onclick="selectDashMood(this,'Sangat Buruk',1)"><div class="mood-emoji">😢</div><div>Sangat Buruk</div></div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <input class="input-mc" id="dashMoodNote" placeholder="Catatan mood (opsional)...">
+        </div>
+        <button class="btn-primary-mc" onclick="saveDashMood()">Simpan Mood 💾</button>
+      </div>
+    </div>
+
+    <!-- ===== MOOD TRACKER ===== -->
+    <div class="page" id="page-moodtracker">
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px;" class="two-col-grid">
+        <div>
+          <div class="card-mc" style="margin-bottom:18px;">
+            <div class="section-title">📈 Riwayat Mood — 7 Hari Terakhir</div>
+            <div class="week-chart-bars" id="moodTrackerChart" style="height:120px;"></div>
+          </div>
+          <div class="card-mc">
+            <div class="section-title">📋 Log Mood</div>
+            <div id="moodHistoryList">
+              <div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Belum ada catatan mood. Mulai log moodmu dari dashboard!</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card-mc" style="margin-bottom:18px;text-align:center;">
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">Rata-rata Mood</div>
+            <div style="font-size:48px;font-weight:800;" id="avgMoodEmoji">—</div>
+            <div style="font-size:24px;font-weight:700;margin-top:4px;" id="avgMoodScore">—</div>
+            <div style="font-size:12px;color:var(--text-muted);" id="avgMoodLabel">Belum ada data</div>
+          </div>
+          <div class="card-mc">
+            <div class="section-title">💡 Tips Hari Ini</div>
+            <div id="moodTipBox" style="padding:14px;background:rgba(124,92,191,0.1);border-radius:12px;font-size:13px;line-height:1.7;border-left:3px solid var(--primary);">
+              Catat moodmu setiap hari untuk mendapat insight yang lebih baik! 🌟
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ASSESSMENT ===== -->
+    <div class="page" id="page-assessment">
+      <div id="assessmentStart">
+        <div class="card-grad" style="margin-bottom:22px;text-align:center;">
+          <div style="font-size:40px;margin-bottom:8px;">📋</div>
+          <div style="font-size:18px;font-weight:700;margin-bottom:6px;">Self Assessment Psikologis</div>
+          <div style="font-size:13px;opacity:0.85;">Evaluasi kondisi mental secara mandiri. Terdiri dari 8 pertanyaan.</div>
+          <button class="btn-outline-mc" style="margin-top:16px;border-color:rgba(255,255,255,0.5);color:#fff;" onclick="startAssessment()">Mulai Sekarang →</button>
+        </div>
+        <div class="card-mc" id="lastResultCard" style="display:none;">
+          <div class="section-title">Hasil Terakhir</div>
+          <div class="score-circle-wrap"><div class="score-circle" id="lastScoreCircle" style="background:conic-gradient(var(--primary) 0deg,var(--secondary) 200deg,rgba(124,92,191,0.15) 200deg 360deg);">
+            <div class="score-inner"><div class="score-num" id="lastScoreNum">—</div><div class="score-label" id="lastScoreLabel">—</div></div>
+          </div></div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.7;text-align:center;margin-top:12px;" id="lastScoreDesc"></div>
+          <button class="btn-primary-mc" style="margin-top:16px;" onclick="startAssessment()">Ulangi Assessment</button>
+        </div>
+      </div>
+      <div id="assessmentQuiz" style="display:none;">
+        <div class="card-mc">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:13px;color:var(--text-muted);">Pertanyaan <span id="currentQ">1</span> dari 8</div>
+            <button onclick="cancelAssessment()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;font-family:'Poppins',sans-serif;">✕ Batal</button>
+          </div>
+          <div class="assess-progress-bar"><div class="assess-progress-fill" id="assessProgress" style="width:12.5%"></div></div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px;" id="questionText"></div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:18px;" id="questionSub"></div>
+          <div id="optionsList"></div>
+          <button class="btn-primary-mc" id="nextBtn" onclick="nextQuestion()" disabled style="margin-top:14px;opacity:0.5;">Lanjutkan</button>
+        </div>
+      </div>
+      <div id="assessmentResult" style="display:none;">
+        <div class="card-mc" style="text-align:center;">
+          <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Hasil Assessment Kamu</div>
+          <div class="score-circle-wrap" id="resultScoreCircle"></div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-top:14px;" id="resultDescription"></div>
+          <div style="margin-top:16px;text-align:left;" id="resultRecommendations"></div>
+          <div style="margin-top:18px;display:flex;gap:10px;">
+            <button class="btn-outline-mc" style="flex:1;" onclick="resetAssessment()">Ulangi</button>
+            <button class="btn-primary-mc" style="flex:1;" onclick="showPage('exercise',null)">Lihat Latihan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== EXERCISE ===== -->
+    <div class="page" id="page-exercise">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="two-col-grid">
+        <div>
+          <div class="section-title">Pilih Latihan</div>
+          <div class="exercise-item" onclick="startMeditationTimer('Meditasi Singkat',5*60,'exercise')">
+            <div class="exercise-icon-box" style="background:rgba(124,92,191,0.2);">🧘</div>
+            <div class="exercise-info"><div class="exercise-title">Meditasi Singkat</div><div class="exercise-sub">5 menit · Mindfulness</div></div>
+            <div style="font-size:11px;color:var(--text-muted);">▶ Mulai</div>
+          </div>
+          <div class="exercise-item" onclick="startMeditationTimer('Latihan Pernapasan',3*60,'exercise')">
+            <div class="exercise-icon-box" style="background:rgba(91,164,207,0.2);">🫁</div>
+            <div class="exercise-info"><div class="exercise-title">Latihan Pernapasan</div><div class="exercise-sub">3 menit · Relaksasi</div></div>
+            <div style="font-size:11px;color:var(--text-muted);">▶ Mulai</div>
+          </div>
+          <div class="exercise-item" onclick="startMeditationTimer('Body Scan',8*60,'exercise')">
+            <div class="exercise-icon-box" style="background:rgba(76,175,132,0.2);">🪷</div>
+            <div class="exercise-info"><div class="exercise-title">Body Scan Meditation</div><div class="exercise-sub">8 menit · Relaksasi Tubuh</div></div>
+            <div style="font-size:11px;color:var(--text-muted);">▶ Mulai</div>
+          </div>
+          <div class="exercise-item" onclick="startMeditationTimer('Visualisasi Positif',10*60,'exercise')">
+            <div class="exercise-icon-box" style="background:rgba(246,166,35,0.2);">🌈</div>
+            <div class="exercise-info"><div class="exercise-title">Visualisasi Positif</div><div class="exercise-sub">10 menit · Mental Strength</div></div>
+            <div style="font-size:11px;color:var(--text-muted);">▶ Mulai</div>
+          </div>
+          <div class="exercise-item" onclick="openBreathingGuide()">
+            <div class="exercise-icon-box" style="background:rgba(232,96,96,0.15);">💨</div>
+            <div class="exercise-info"><div class="exercise-title">4-7-8 Breathing</div><div class="exercise-sub">Panduan langkah demi langkah</div></div>
+            <div style="font-size:11px;color:var(--text-muted);">▶ Mulai</div>
+          </div>
+          <!-- Journaling -->
+          <div class="card-mc" style="margin-top:18px;">
+            <div class="section-title">📔 Jurnal Harian</div>
+            <textarea class="chat-input" id="journalText" style="width:100%;border-radius:14px;min-height:100px;resize:vertical;padding:14px;" placeholder="Tuliskan perasaan dan pikiranmu hari ini..."></textarea>
+            <div style="display:flex;gap:10px;margin-top:10px;">
+              <select class="input-mc" style="flex:1;" id="journalMood">
+                <option>😄 Sangat Baik</option>
+                <option selected>😊 Baik</option>
+                <option>😐 Biasa Saja</option>
+                <option>😔 Buruk</option>
+                <option>😢 Sangat Buruk</option>
+              </select>
+              <button class="btn-primary-mc" style="width:auto;padding:12px 24px;" onclick="saveJournal()">Simpan 💾</button>
+            </div>
+          </div>
+        </div>
+        <!-- Timer panel -->
+        <div>
+          <div class="card-mc" style="text-align:center;">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;" id="meditationTitle">Meditasi Singkat</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;" id="meditationSub">5 menit</div>
+            <div class="timer-circle" id="timerCircle" style="background:conic-gradient(var(--primary) 0deg,var(--secondary) 0deg,rgba(124,92,191,0.1) 0deg);">
+              <div class="timer-inner">
+                <div class="timer-digits" id="timerDisplay">05:00</div>
+                <div class="timer-text" id="timerInstruction">Tarik napas dalam...</div>
+              </div>
+            </div>
+            <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;">
+              <button class="btn-outline-mc" onclick="resetTimer()">⟳ Reset</button>
+              <button class="btn-primary-mc" id="timerBtn" onclick="toggleTimer()" style="width:auto;padding:12px 28px;">▶ Mulai</button>
+            </div>
+            <div style="margin-top:16px;font-size:12px;color:var(--text-muted);" id="timerStatus">Tekan mulai untuk memulai sesi</div>
+          </div>
+          <!-- Journal history -->
+          <div class="card-mc" style="margin-top:18px;">
+            <div class="section-title">Jurnal Terbaru</div>
+            <div id="journalHistory">
+              <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">Belum ada jurnal. Mulai tulis hari ini! 📔</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GRATITUDE JOURNAL ===== -->
+    <div class="page" id="page-gratitude">
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px;" class="two-col-grid">
+        <div>
+          <div class="card-mc" style="margin-bottom:18px;">
+            <div class="section-title">🙏 Jurnal Syukur Hari Ini</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.7;">Tuliskan 3 hal yang kamu syukuri hari ini. Penelitian menunjukkan bahwa bersyukur meningkatkan kebahagiaan hingga 25%! ✨</div>
+            <div id="gratitudeInputs">
+              <div class="gratitude-input-row"><div class="gratitude-number">1</div><input class="input-mc" id="grat1" placeholder="Aku bersyukur karena..."></div>
+              <div class="gratitude-input-row"><div class="gratitude-number">2</div><input class="input-mc" id="grat2" placeholder="Aku bersyukur karena..."></div>
+              <div class="gratitude-input-row"><div class="gratitude-number">3</div><input class="input-mc" id="grat3" placeholder="Aku bersyukur karena..."></div>
+            </div>
+            <div style="margin-top:14px;">
+              <label class="label-mc">Perasaanmu hari ini</label>
+              <textarea class="input-mc" id="gratFeeling" style="resize:none;min-height:70px;" placeholder="Bagaimana perasaanmu secara keseluruhan?"></textarea>
+            </div>
+            <button class="btn-primary-mc" style="margin-top:14px;" onclick="saveGratitude()">Simpan Jurnal Syukur 🌟</button>
+          </div>
+        </div>
+        <div>
+          <div class="card-mc" style="margin-bottom:18px;text-align:center;">
+            <div style="font-size:36px;margin-bottom:8px;">🌟</div>
+            <div style="font-size:22px;font-weight:700;" id="gratStreak">0</div>
+            <div style="font-size:12px;color:var(--text-muted);">Hari berturut-turut bersyukur</div>
+          </div>
+          <div class="card-mc">
+            <div class="section-title">Entri Terbaru</div>
+            <div id="gratitudeHistory">
+              <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">Belum ada entri. Mulai bersyukur hari ini! 🙏</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MATERI ===== -->
+    <div class="page" id="page-materi">
+      <div style="position:relative;margin-bottom:18px;">
+        <input type="text" class="input-mc" placeholder="🔍 Cari materi..." oninput="filterArticles(this.value)">
+      </div>
+      <div class="tab-row" style="margin-bottom:18px;">
+        <button class="tab-btn active" onclick="filterTag('semua',this)">Semua</button>
+        <button class="tab-btn" onclick="filterTag('stres',this)">Stres</button>
+        <button class="tab-btn" onclick="filterTag('kecemasan',this)">Kecemasan</button>
+        <button class="tab-btn" onclick="filterTag('mood',this)">Mood</button>
+        <button class="tab-btn" onclick="filterTag('mindfulness',this)">Mindfulness</button>
+      </div>
+      <div id="articlesList">
+        <div class="article-card" onclick="openArticle('Cara Mengatasi Overthinking')"><div class="article-emoji">🌀</div><div class="article-body"><div><span class="article-tag tag-stress">Stres</span></div><div class="article-title">Cara Mengatasi Overthinking</div><div class="article-meta">6 min · Psikologi Praktis</div></div></div>
+        <div class="article-card" onclick="openArticle('Teknik Mengelola Emosi')"><div class="article-emoji">💪</div><div class="article-body"><div><span class="article-tag tag-mood">Mood</span></div><div class="article-title">Teknik Mengelola Emosi</div><div class="article-meta">7 min · Regulasi Emosi</div></div></div>
+        <div class="article-card" onclick="openArticle('Mindfulness untuk Pemula')"><div class="article-emoji">🧘</div><div class="article-body"><div><span class="article-tag tag-mindfulness">Mindfulness</span></div><div class="article-title">Mindfulness untuk Pemula</div><div class="article-meta">6 min · Meditasi</div></div></div>
+        <div class="article-card" onclick="openArticle('Self Love & Percaya Diri')"><div class="article-emoji">💜</div><div class="article-body"><div><span class="article-tag tag-self-love">Self Love</span></div><div class="article-title">Self Love & Percaya Diri</div><div class="article-meta">9 min · Pengembangan Diri</div></div></div>
+        <div class="article-card" onclick="openArticle('Mengatasi Burnout')"><div class="article-emoji">🔥</div><div class="article-body"><div><span class="article-tag tag-burnout">Burnout</span></div><div class="article-title">Mengatasi Burnout</div><div class="article-meta">8 min · Kesehatan Kerja</div></div></div>
+        <div class="article-card" onclick="openArticle('Pola Tidur & Kesehatan Mental')"><div class="article-emoji">😴</div><div class="article-body"><div><span class="article-tag tag-mindfulness">Mindfulness</span></div><div class="article-title">Pola Tidur & Kesehatan Mental</div><div class="article-meta">5 min · Kesehatan</div></div></div>
+        <div class="article-card" onclick="openArticle('Mengatasi Social Anxiety')"><div class="article-emoji">🦋</div><div class="article-body"><div><span class="article-tag tag-anxiety">Kecemasan</span></div><div class="article-title">Mengatasi Social Anxiety</div><div class="article-meta">8 min · Kecemasan Sosial</div></div></div>
+      </div>
+    </div>
+
+    <!-- ===== AI CHAT ===== -->
+    <div class="page" id="page-aichat">
+      <div class="chat-container">
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg-card2);border-radius:14px;margin-bottom:14px;">
+          <div style="width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite;"></div>
+          <span style="font-size:12.5px;font-weight:600;">MindCare AI</span>
+          <span style="font-size:11px;color:var(--text-muted);">Powered by Claude · Siap mendengarkan</span>
+          <button class="btn-sm-mc" style="margin-left:auto;font-size:11px;" onclick="clearChat()">🗑 Bersihkan</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg bot">
+            <div class="chat-avatar bot-av">🤖</div>
+            <div class="chat-bubble bot-bubble" id="firstBotMsg">Hai! 👋 Aku MindCare AI, teman virtualmu untuk kesehatan mental. Ceritakan apa yang sedang kamu rasakan hari ini — aku di sini untuk mendengarkan dan membantumu. 💜</div>
+          </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="chat-avatar bot-av" style="width:30px;height:30px;font-size:14px;">🤖</div>
+          <div style="padding:10px 14px;background:var(--bg-card2);border-radius:14px;display:flex;gap:4px;align-items:center;">
+            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+          </div>
+        </div>
+        <div>
+          <div class="quick-suggestions" id="quickSuggestions">
+            <div class="quick-chip" onclick="sendQuickMsg(this)">Aku merasa cemas 😰</div>
+            <div class="quick-chip" onclick="sendQuickMsg(this)">Bantu aku rileks 🌿</div>
+            <div class="quick-chip" onclick="sendQuickMsg(this)">Teknik pernapasan 🫁</div>
+            <div class="quick-chip" onclick="sendQuickMsg(this)">Motivasi dong 💪</div>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-input" id="chatInput" placeholder="Ketik pesanmu..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}">
+            <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COMMUNITY ===== -->
+    <div class="page" id="page-community">
+      <div class="post-form-wrap">
+        <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
+          <div class="post-anon"><i class="fas fa-user-secret"></i></div>
+          <textarea class="post-textarea" id="newPostText" placeholder="Ceritakan yang kamu rasakan... (postingan bersifat anonim)"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;" id="communityTagBtns">
+          <button class="btn-sm-mc" onclick="addPostTag('#Overthinking')">+ #Overthinking</button>
+          <button class="btn-sm-mc" onclick="addPostTag('#Kecemasan')">+ #Kecemasan</button>
+          <button class="btn-sm-mc" onclick="addPostTag('#Motivasi')">+ #Motivasi</button>
+          <button class="btn-sm-mc" onclick="addPostTag('#SelfLove')">+ #SelfLove</button>
+          <button class="btn-sm-mc" onclick="addPostTag('#Burnout')">+ #Burnout</button>
+        </div>
+        <div id="selectedTagsDisplay" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+        <button class="btn-primary-mc" onclick="submitPost()">Posting Anonim 🔒</button>
+      </div>
+      <div style="margin-bottom:18px;">
+        <div class="section-title">🔥 Topik Populer</div>
+        <div class="badge-row">
+          <span class="info-badge badge-purple">#Overthinking 1.2k</span>
+          <span class="info-badge badge-red">#Kecemasan 987</span>
+          <span class="info-badge badge-green">#SelfLove 1.5k</span>
+          <span class="info-badge badge-orange">#Motivasi 2.1k</span>
+        </div>
+      </div>
+      <div class="section-title">💬 Diskusi Terbaru</div>
+      <div id="communityFeed">
+        <div class="community-post"><div class="post-author"><div class="post-anon"><i class="fas fa-user-secret"></i></div><div><div class="post-name">@anonim_123</div><div class="post-time">2 jam lalu</div></div></div><div class="post-content">Tips mengatasi cemas saat presentasi? Aku selalu gemetar sebelum presentasi meski udah coba napas dalam 😅</div><div class="post-tags"><span class="post-tag">#Kecemasan</span><span class="post-tag">#Presentasi</span></div><div class="post-actions"><button class="post-action-btn" onclick="likePost(this)"><i class="fas fa-heart"></i> 24</button><button class="post-action-btn"><i class="fas fa-comment"></i> 8</button></div></div>
+        <div class="community-post"><div class="post-author"><div class="post-anon"><i class="fas fa-user-secret"></i></div><div><div class="post-name">@hopeful</div><div class="post-time">4 jam lalu</div></div></div><div class="post-content">Bagaimana cara percaya diri? Aku sering merasa tidak cukup baik dan selalu membandingkan diri dengan orang lain 🙏</div><div class="post-tags"><span class="post-tag">#SelfLove</span><span class="post-tag">#PercayaDiri</span></div><div class="post-actions"><button class="post-action-btn" onclick="likePost(this)"><i class="fas fa-heart"></i> 47</button><button class="post-action-btn"><i class="fas fa-comment"></i> 12</button></div></div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE ===== -->
+    <div class="page" id="page-profile">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="two-col-grid">
+        <div>
+          <div class="profile-header">
+            <div class="profile-avatar-big" id="profileAvatarBig">🌸</div>
+            <div style="font-size:20px;font-weight:700;margin-bottom:2px;" id="profileNameDisplay">Pengguna</div>
+            <div style="font-size:12px;opacity:0.8;" id="profileBioDisplay">Semangat!</div>
+            <div style="display:flex;justify-content:center;gap:24px;margin-top:16px;">
+              <div style="text-align:center;"><div style="font-size:22px;font-weight:700;" id="profileStreakStat">0</div><div style="font-size:11px;opacity:0.8;">Hari Aktif</div></div>
+              <div style="text-align:center;"><div style="font-size:22px;font-weight:700;" id="profileExStat">0</div><div style="font-size:11px;opacity:0.8;">Latihan</div></div>
+              <div style="text-align:center;"><div style="font-size:22px;font-weight:700;" id="profileJournalStat">0</div><div style="font-size:11px;opacity:0.8;">Jurnal</div></div>
+            </div>
+          </div>
+          <div class="card-mc">
+            <div class="section-title">Edit Profil</div>
+            <div style="margin-bottom:12px;"><label class="label-mc">Nama</label><input class="input-mc" id="profileName"></div>
+            <div style="margin-bottom:12px;"><label class="label-mc">Email</label><input class="input-mc" id="profileEmail" type="email"></div>
+            <div style="margin-bottom:12px;">
+              <label class="label-mc">Avatar</label>
+              <div class="avatar-picker" id="profileAvatarPicker">
+                <div class="avatar-opt" data-avatar="🌸" onclick="selectProfileAvatar(this)">🌸</div>
+                <div class="avatar-opt" data-avatar="🌙" onclick="selectProfileAvatar(this)">🌙</div>
+                <div class="avatar-opt" data-avatar="⭐" onclick="selectProfileAvatar(this)">⭐</div>
+                <div class="avatar-opt" data-avatar="🌻" onclick="selectProfileAvatar(this)">🌻</div>
+                <div class="avatar-opt" data-avatar="🦋" onclick="selectProfileAvatar(this)">🦋</div>
+                <div class="avatar-opt" data-avatar="🌈" onclick="selectProfileAvatar(this)">🌈</div>
+                <div class="avatar-opt" data-avatar="🔮" onclick="selectProfileAvatar(this)">🔮</div>
+                <div class="avatar-opt" data-avatar="🧸" onclick="selectProfileAvatar(this)">🧸</div>
+              </div>
+            </div>
+            <div style="margin-bottom:14px;"><label class="label-mc">Bio</label><textarea class="input-mc" id="profileBio" style="resize:none;min-height:60px;"></textarea></div>
+            <button class="btn-primary-mc" onclick="saveProfile()">Simpan Perubahan</button>
+          </div>
+        </div>
+        <div>
+          <div class="card-mc" style="margin-bottom:18px;">
+            <div class="section-title">🏆 Achievement</div>
+            <div class="achievement-grid" id="achievementsGrid"></div>
+          </div>
+          <div class="card-mc">
+            <div class="section-title">⚙️ Pengaturan</div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(124,92,191,0.2);">🔔</div><div><div class="setting-label">Notifikasi</div><div class="setting-sub">Pengingat harian</div></div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleSetting(this,'Notifikasi')"><span class="slider-toggle"></span></label></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(76,175,132,0.2);">🔒</div><div><div class="setting-label">Privasi</div><div class="setting-sub">Data tersimpan lokal</div></div></div><i class="fas fa-chevron-right" style="color:var(--text-muted);font-size:12px;"></i></div>
+            <div class="setting-item"><div class="setting-left"><div class="setting-icon" style="background:rgba(232,96,96,0.2);">🗑</div><div><div class="setting-label" style="color:var(--danger);">Hapus Semua Data</div><div class="setting-sub">Reset data lokal</div></div></div><i class="fas fa-chevron-right" style="color:var(--text-muted);font-size:12px;"></i></div>
+            <div class="setting-item" onclick="doLogout()"><div class="setting-left"><div class="setting-icon" style="background:rgba(232,96,96,0.2);">🚪</div><div><div class="setting-label" style="color:var(--danger);">Keluar</div><div class="setting-sub">Logout dari akun</div></div></div><i class="fas fa-chevron-right" style="color:var(--text-muted);font-size:12px;"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- Article Modal -->
+<div class="modal-overlay" id="articleModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeArticle()">✕</button>
+    <div style="font-size:40px;margin-bottom:12px;" id="modalEmoji">📚</div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:8px;" id="modalTitle"></div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:18px;">📚 MindCare · Kesehatan Mental</div>
+    <div style="font-size:13.5px;color:var(--text-light);line-height:1.9;" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Breathing Guide Modal -->
+<div class="modal-overlay" id="breathModal">
+  <div class="modal-box" style="text-align:center;max-width:420px;">
+    <button class="modal-close" onclick="closeBreath()">✕</button>
+    <div style="font-size:18px;font-weight:700;margin-bottom:6px;">Teknik 4-7-8 Breathing 🫁</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;">Teknik ini membantu sistem saraf rileks dalam menit</div>
+    <div style="position:relative;width:180px;height:180px;margin:0 auto 24px;">
+      <div id="breathCircle" style="width:180px;height:180px;border-radius:50%;background:rgba(124,92,191,0.2);border:3px solid var(--primary);display:flex;align-items:center;justify-content:center;transition:all 4s ease;">
+        <div style="text-align:center;">
+          <div class="breathing-count" id="breathCount">4</div>
+          <div class="breathing-text" id="breathPhase">Tarik Napas</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Siklus: <span id="breathCycleNum">0</span>/4</div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn-outline-mc" id="breathStopBtn" onclick="stopBreathing()" style="display:none;">⏹ Stop</button>
+      <button class="btn-primary-mc" id="breathStartBtn" onclick="startBreathing()" style="width:auto;padding:12px 28px;">▶ Mulai</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification Toast -->
+<div class="notif-toast" id="notifToast">
+  <div class="notif-icon" id="notifIcon">🔔</div>
+  <div><div class="notif-title" id="notifTitle">Notifikasi</div><div class="notif-body" id="notifBody">Pesan</div></div>
+</div>
+
+<script>
+// ===== APP STATE =====
+const App = {
+  users: JSON.parse(localStorage.getItem('mc_users') || '{}'),
+  currentUser: null,
+  chatHistory: [],
+  postTags: [],
+  timer: { interval: null, running: false, total: 300, current: 300, name: 'Meditasi Singkat' },
+  breath: { interval: null, running: false, cycle: 0, phase: 'in', countdown: 4 },
+};
+
+// Load users from storage
+function getUsers() { return JSON.parse(localStorage.getItem('mc_users') || '{}'); }
+function saveUsers(u) { localStorage.setItem('mc_users', JSON.stringify(u)); }
+function getUserData(email) { return JSON.parse(localStorage.getItem('mc_data_' + email) || 'null'); }
+function saveUserData(email, data) { localStorage.setItem('mc_data_' + email, JSON.stringify(data)); }
+function defaultUserData(name, avatar, bio, goals) {
+  return { name, avatar: avatar||'🌸', bio: bio||'Sedang belajar mengenal diri sendiri 🌱', email:'', goals: goals||[], streak:0, lastActive:'', exercises:0, journals:[], gratitudes:[], moods:[], assessmentScore:null, achievements:['streak7','mindful10','journal5'], notifications:true };
+}
+
+// ===== AUTH HELPERS =====
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i class="fas fa-eye-slash"></i>'; }
+  else { inp.type = 'password'; btn.innerHTML = '<i class="fas fa-eye"></i>'; }
+}
+function showError(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show', show);
+}
+function markError(inputId, errId, isErr) {
+  const inp = document.getElementById(inputId);
+  if (inp) inp.classList.toggle('error', isErr);
+  showError(errId, isErr);
+}
+function checkStrength(pw) {
+  const segs = document.querySelectorAll('.strength-seg');
+  const label = document.getElementById('strengthLabel');
+  let s = 0;
+  if (pw.length >= 8) s++;
+  if (/[A-Z]/.test(pw)) s++;
+  if (/[0-9]/.test(pw)) s++;
+  if (/[^A-Za-z0-9]/.test(pw)) s++;
+  const colors = ['','#E86060','#F6A623','#4CAF84','#7C5CBF'];
+  const labels = ['','Lemah','Cukup','Kuat','Sangat Kuat'];
+  segs.forEach((seg, i) => { seg.style.background = i < s ? colors[s] : 'rgba(124,92,191,0.15)'; });
+  label.textContent = pw ? labels[s] : '';
+  label.style.color = colors[s];
+}
+function selectAvatar(el) {
+  document.querySelectorAll('#avatarPicker .avatar-opt').forEach(a => a.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectProfileAvatar(el) {
+  document.querySelectorAll('#profileAvatarPicker .avatar-opt').forEach(a => a.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleGoal(el) { el.classList.toggle('selected'); }
+function toggleSingleMood(el) {
+  document.querySelectorAll('#currentMoodList .mood-check').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ===== STEP NAVIGATION =====
+let regStep = 1;
+function nextStep(step) {
+  if (step === 2 && regStep === 1) {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value;
+    const pass2 = document.getElementById('regPass2').value;
+    let ok = true;
+    markError('regName','regNameErr', !name); if(!name) ok=false;
+    markError('regEmail','regEmailErr', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ok=false;
+    markError('regPass','regPassErr', pass.length < 8); if(pass.length<8) ok=false;
+    markError('regPass2','regPass2Err', pass !== pass2); if(pass!==pass2) ok=false;
+    if(!ok) return;
+    // Check if email exists
+    const users = getUsers();
+    if (users[email]) { markError('regEmail','regEmailErr',true); document.getElementById('regEmailErr').textContent='Email sudah terdaftar'; return; }
+  }
+  if (step > 3) return;
+  regStep = step;
+  document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step'+step).classList.add('active');
+  const dots = document.querySelectorAll('.step-dot');
+  dots.forEach((d,i) => { d.classList.toggle('active', i < step); });
+}
+
+// ===== SHOW/HIDE SCREENS =====
+function showLogin() {
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('registerScreen').style.display='none';
+  document.getElementById('forgotScreen').style.display='none';
+}
+function showRegister() {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('registerScreen').style.display='flex';
+  document.getElementById('forgotScreen').style.display='none';
+  regStep=1; nextStep(1);
+}
+function showForgot() {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('forgotScreen').style.display='flex';
+}
+
+// ===== REGISTER =====
+function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const avatar = document.querySelector('#avatarPicker .avatar-opt.selected')?.dataset.avatar || '🌸';
+  const bio = document.getElementById('regBio').value.trim();
+  const goals = [...document.querySelectorAll('#goalsList .mood-check.selected')].map(g=>g.textContent);
+  const users = getUsers();
+  users[email] = { password: btoa(pass), name, avatar };
+  saveUsers(users);
+  const data = defaultUserData(name, avatar, bio, goals);
+  data.email = email;
+  saveUserData(email, data);
+  showNotif('🎉 Akun berhasil dibuat!', 'Selamat datang di MindCare, ' + name + '!');
+  setTimeout(() => loginUser(email, data), 800);
+}
+
+// ===== LOGIN =====
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  let ok = true;
+  markError('loginEmail','loginEmailErr', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ok=false;
+  if (!ok) return;
+  const users = getUsers();
+  if (!users[email] || users[email].password !== btoa(pass)) {
+    markError('loginPass','loginPassErr',true);
+    document.getElementById('loginPassErr').textContent='Email atau password salah';
+    return;
+  }
+  const data = getUserData(email) || defaultUserData(users[email].name, users[email].avatar);
+  data.email = email;
+  loginUser(email, data);
+}
+
+function loginUser(email, data) {
+  App.currentUser = data;
+  localStorage.setItem('mc_session', email);
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('registerScreen').style.display='none';
+  document.getElementById('forgotScreen').style.display='none';
+  document.getElementById('appWrapper').style.display='flex';
+  initApp();
+}
+
+function doForgot() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  const users = getUsers();
+  if (!users[email]) { markError('forgotEmail','forgotEmailErr',true); return; }
+  showNotif('📧 Link terkirim!', 'Cek emailmu untuk reset password. (Demo: fitur simulasi)');
+  setTimeout(showLogin, 1500);
+}
+
+function doLogout() {
+  if (!confirm('Yakin ingin keluar?')) return;
+  saveCurrentUser();
+  localStorage.removeItem('mc_session');
+  App.currentUser = null;
+  App.chatHistory = [];
+  document.getElementById('appWrapper').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+// ===== SESSION RESTORE =====
+function checkSession() {
+  const email = localStorage.getItem('mc_session');
+  if (email) {
+    const users = getUsers();
+    if (users[email]) {
+      const data = getUserData(email) || defaultUserData(users[email].name, users[email].avatar);
+      data.email = email;
+      App.currentUser = data;
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('appWrapper').style.display='flex';
+      initApp();
+      return true;
+    }
+  }
+  return false;
+}
+
+// ===== INIT APP =====
+function initApp() {
+  updateSidebar();
+  updateDashboard();
+  updateStreak();
+  renderAchievements();
+  renderMoodHistory();
+  renderGratitudeHistory();
+  renderJournalHistory();
+  updateProfilePage();
+  updateStats();
+  // Greet
+  const h = new Date().getHours();
+  const greeting = h < 12 ? 'Selamat pagi' : h < 18 ? 'Selamat siang' : 'Selamat malam';
+  const el = document.getElementById('dashGreeting');
+  if (el) el.textContent = greeting + ', ' + App.currentUser.name + '! 🌟';
+  // First AI message with name
+  const fm = document.getElementById('firstBotMsg');
+  if (fm) fm.textContent = `Hai ${App.currentUser.name}! 👋 Aku MindCare AI, teman virtualmu untuk kesehatan mental. Ceritakan apa yang sedang kamu rasakan hari ini — aku di sini untuk mendengarkan dan membantumu. 💜`;
+}
+
+function saveCurrentUser() {
+  if (App.currentUser) saveUserData(App.currentUser.email, App.currentUser);
+}
+
+function updateSidebar() {
+  const u = App.currentUser;
+  document.getElementById('sidebarAvatar').textContent = u.avatar;
+  document.getElementById('sidebarName').textContent = u.name;
+  document.getElementById('sidebarStreak').textContent = '🔥 ' + u.streak + ' hari streak';
+  document.getElementById('topbarAvatar').textContent = u.avatar;
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  const u = App.currentUser;
+  if (u.lastActive !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (u.lastActive === yesterday) u.streak++;
+    else if (!u.lastActive) u.streak = 1;
+    else u.streak = 1;
+    u.lastActive = today;
+    saveCurrentUser();
+    updateSidebar();
+  }
+}
+
+function updateStats() {
+  const u = App.currentUser;
+  document.getElementById('statStreak').textContent = u.streak;
+  document.getElementById('statExercise').textContent = u.exercises;
+  document.getElementById('statAssessScore').textContent = u.assessmentScore ?? '—';
+  document.getElementById('statJournals').textContent = u.journals.length;
+}
+
+function updateDashboard() {
+  const u = App.currentUser;
+  // Mood chart
+  const days = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const today = new Date().getDay();
+  const chartEl = document.getElementById('dashMoodChart');
+  if (!chartEl) return;
+  chartEl.innerHTML = '';
+  for (let i = 6; i >= 0; i--) {
+    const dayIdx = (today - i + 7) % 7;
+    const dayLabel = days[dayIdx];
+    const moodEntry = u.moods.slice().reverse().find(m => {
+      const d = new Date(m.time);
+      return d.getDay() === dayIdx && (Date.now() - d.getTime()) < 7*24*3600*1000;
+    });
+    const h = moodEntry ? (moodEntry.score / 5 * 100) : 15;
+    const isToday = i === 0;
+    const wrap = document.createElement('div');
+    wrap.className = 'week-bar-wrap';
+    wrap.innerHTML = `<div class="week-bar ${isToday?'today':''}" style="height:${h}%;background:${isToday?'var(--purple-grad)':'rgba(124,92,191,'+(moodEntry?0.6:0.2)+')'}"></div><div class="week-label" style="${isToday?'color:var(--primary-light)':''}">${dayLabel}</div>`;
+    chartEl.appendChild(wrap);
+  }
+  // Progress bars
+  const recentMoods = u.moods.slice(-7);
+  if (recentMoods.length > 0) {
+    const avg = recentMoods.reduce((a,b)=>a+b.score,0)/recentMoods.length;
+    const moodPct = Math.round(avg/5*100);
+    const stressPct = Math.round((5-avg)/5*60);
+    document.getElementById('dashMoodBar').style.width = moodPct+'%';
+    document.getElementById('dashMoodVal').textContent = moodPct+'%';
+    document.getElementById('dashStressBar').style.width = stressPct+'%';
+    document.getElementById('dashStressVal').textContent = stressPct+'%';
+    const lastMood = u.moods[u.moods.length-1];
+    const moodEmojis = {5:'😄',4:'😊',3:'😐',2:'😔',1:'😢'};
+    const moodLabels = {5:'Sangat Baik 😄',4:'Baik 😊',3:'Biasa Saja 😐',2:'Buruk 😔',1:'Sangat Buruk 😢'};
+    document.getElementById('dashScore').textContent = avg.toFixed(1);
+    document.getElementById('dashMoodLabel').textContent = moodLabels[lastMood.score] || 'Baik 😊';
+  }
+}
+
+// ===== NAVIGATION =====
+function showPage(pageId, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+pageId).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  const titles = {
+    dashboard:['Dashboard 👋','Semangat untuk hari ini!'],
+    moodtracker:['Mood Tracker 📈','Pantau kondisi emosimu'],
+    assessment:['Self Assessment 📋','Evaluasi kondisi mental kamu'],
+    exercise:['Daily Exercise 🧘','Latihan untuk pikiran lebih sehat'],
+    gratitude:['Jurnal Syukur 🙏','Syukuri setiap momen indah'],
+    materi:['Materi & Panduan 📚','Artikel & tips kesehatan mental'],
+    aichat:['AI Assistant 🤖','Teman virtual siap mendengarkan'],
+    community:['Komunitas 💬','Ruang aman untuk berbagi'],
+    profile:['Profil & Pengaturan 👤','Kelola akun dan preferensimu']
+  };
+  if (titles[pageId]) {
+    document.getElementById('pageTitle').innerHTML = titles[pageId][0];
+    document.getElementById('pageSubtitle').textContent = titles[pageId][1];
+  }
+  if (pageId === 'moodtracker') renderMoodHistory();
+  if (pageId === 'profile') updateProfilePage();
+  if (pageId === 'exercise') { renderJournalHistory(); updateStats(); }
+  if (pageId === 'gratitude') renderGratitudeHistory();
+  if (pageId === 'dashboard') { updateDashboard(); updateStats(); }
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+  }
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+// ===== NOTIFICATION =====
+function showNotif(title, body, icon='🔔') {
+  document.getElementById('notifTitle').textContent = title;
+  document.getElementById('notifBody').textContent = body;
+  document.getElementById('notifIcon').textContent = icon;
+  const t = document.getElementById('notifToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
+function openNotifPanel() {
+  showNotif('🔔 Notifikasi', App.currentUser.notifications ? 'Pengingat latihan aktif!' : 'Notifikasi dinonaktifkan');
+}
+
+// ===== MOOD =====
+let selectedMoodScore = null;
+function selectDashMood(el, label, score) {
+  document.querySelectorAll('#dashboardMoodRow .mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMoodScore = score;
+}
+function saveDashMood() {
+  if (!selectedMoodScore) { showNotif('⚠️ Pilih mood dulu ya!',''); return; }
+  const note = document.getElementById('dashMoodNote').value.trim();
+  const moodEmojis = {5:'😄',4:'😊',3:'😐',2:'😔',1:'😢'};
+  const moodLabels = {5:'Sangat Baik',4:'Baik',3:'Biasa Saja',2:'Buruk',1:'Sangat Buruk'};
+  App.currentUser.moods.push({ score: selectedMoodScore, label: moodLabels[selectedMoodScore], emoji: moodEmojis[selectedMoodScore], note, time: new Date().toISOString() });
+  saveCurrentUser();
+  updateDashboard();
+  updateStats();
+  document.getElementById('dashMoodNote').value = '';
+  document.querySelectorAll('#dashboardMoodRow .mood-btn').forEach(b => b.classList.remove('selected'));
+  selectedMoodScore = null;
+  showNotif('✅ Mood tersimpan!', 'Mood kamu berhasil dicatat. Keep going! 🌟');
+}
+
+// ===== MOOD TRACKER PAGE =====
+function renderMoodHistory() {
+  const u = App.currentUser;
+  const list = document.getElementById('moodHistoryList');
+  if (!list) return;
+  if (u.moods.length === 0) { list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">Belum ada catatan mood.</div>'; return; }
+  const moodTips = { 5:'Luar biasa! Pertahankan energi positifmu. ✨', 4:'Bagus! Jaga moodmu dengan latihan ringan.', 3:'Coba latihan pernapasan untuk meningkatkan mood.', 2:'Yuk coba journaling atau ngobrol sama AI Assistant.', 1:'Kami ada untukmu. Coba teknik 4-7-8 breathing.' };
+  const avg = u.moods.length > 0 ? u.moods.reduce((a,b)=>a+b.score,0)/u.moods.length : 0;
+  document.getElementById('avgMoodScore').textContent = avg.toFixed(1);
+  document.getElementById('avgMoodEmoji').textContent = avg >= 4.5?'😄':avg>=3.5?'😊':avg>=2.5?'😐':avg>=1.5?'😔':'😢';
+  document.getElementById('avgMoodLabel').textContent = avg>=4?'Kondisi baik':avg>=3?'Cukup baik':'Perlu perhatian';
+  const lastMood = u.moods[u.moods.length-1];
+  document.getElementById('moodTipBox').textContent = moodTips[lastMood.score] || 'Catat moodmu setiap hari! 🌟';
+  list.innerHTML = u.moods.slice().reverse().slice(0,10).map(m=>`
+    <div class="mood-history-row">
+      <div class="mood-history-icon">${m.emoji}</div>
+      <div class="mood-history-info">
+        <div class="mood-history-label">${m.label}</div>
+        <div class="mood-history-time">${new Date(m.time).toLocaleString('id-ID',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+        ${m.note?`<div class="mood-history-note">"${m.note}"</div>`:''}
+      </div>
+      <div class="info-badge badge-purple" style="font-size:16px;font-weight:700;">${m.score}/5</div>
+    </div>`).join('');
+  // Chart
+  const chartEl = document.getElementById('moodTrackerChart');
+  if (!chartEl) return;
+  const days = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const today = new Date().getDay();
+  chartEl.innerHTML = '';
+  for (let i=6;i>=0;i--) {
+    const dayIdx = (today-i+7)%7;
+    const moodEntry = u.moods.slice().reverse().find(m=>{ const d=new Date(m.time); return d.getDay()===dayIdx&&(Date.now()-d.getTime())<7*24*3600*1000; });
+    const h = moodEntry ? (moodEntry.score/5*100) : 8;
+    const isToday = i===0;
+    const wrap = document.createElement('div');
+    wrap.className='week-bar-wrap';
+    wrap.innerHTML=`<div class="week-bar${isToday?' today':''}" style="height:${h}%;background:${isToday?'var(--purple-grad)':'rgba(124,92,191,'+(moodEntry?0.6:0.2)+')'};"></div><div class="week-label">${days[dayIdx]}</div><div class="week-val">${moodEntry?moodEntry.score+'/5':'-'}</div>`;
+    chartEl.appendChild(wrap);
+  }
+}
+
+// ===== ASSESSMENT =====
+const assessQuestions = [
+  {q:"Bagaimana perasaanmu dalam 2 minggu terakhir?",sub:"Pilih yang paling sesuai",opts:["😄 Sangat Baik","😊 Baik","😐 Biasa Saja","😔 Buruk","😢 Sangat Buruk"],scores:[10,8,5,3,1]},
+  {q:"Seberapa sering kamu merasa cemas atau khawatir?",sub:"Frekuensi dalam seminggu terakhir",opts:["Tidak pernah","Jarang (1-2x)","Kadang (3-4x)","Sering (5-6x)","Hampir setiap hari"],scores:[10,8,5,3,1]},
+  {q:"Bagaimana kualitas tidurmu?",sub:"Rata-rata seminggu terakhir",opts:["Sangat baik, 8+ jam","Cukup baik, 7-8 jam","Biasa, 6-7 jam","Kurang, 5-6 jam","Sangat kurang"],scores:[10,8,6,4,1]},
+  {q:"Seberapa mampu kamu mengelola stres?",sub:"Kemampuan menghadapi tekanan",opts:["Sangat mampu","Mampu","Cukup mampu","Kurang mampu","Tidak mampu"],scores:[10,8,6,3,1]},
+  {q:"Apakah kamu memiliki support system yang baik?",sub:"Keluarga, teman, atau orang terdekat",opts:["Ya, sangat baik","Ya, cukup baik","Biasa saja","Kurang baik","Tidak ada"],scores:[10,8,6,3,1]},
+  {q:"Bagaimana kemampuanmu berkonsentrasi?",sub:"Fokus dalam pekerjaan/belajar",opts:["Sangat baik","Baik","Cukup","Kurang","Sangat kurang"],scores:[10,8,5,3,1]},
+  {q:"Seberapa sering kamu merasa lelah atau kelelahan?",sub:"Kondisi fisik dan mental",opts:["Jarang/Tidak pernah","Kadang-kadang","Cukup sering","Sering","Sangat sering"],scores:[10,8,5,3,1]},
+  {q:"Apakah kamu bisa menikmati aktivitas yang biasanya kamu sukai?",sub:"Kemampuan merasakan kesenangan",opts:["Ya, sangat bisa","Sebagian besar ya","Kadang-kadang","Jarang bisa","Tidak bisa sama sekali"],scores:[10,8,5,3,1]}
+];
+let currentQ=0, assessScores=[], selectedOpt=null;
+
+function startAssessment() {
+  document.getElementById('assessmentStart').style.display='none';
+  document.getElementById('assessmentResult').style.display='none';
+  document.getElementById('assessmentQuiz').style.display='block';
+  currentQ=0; assessScores=[]; selectedOpt=null;
+  renderQuestion();
+}
+function cancelAssessment() {
+  document.getElementById('assessmentQuiz').style.display='none';
+  document.getElementById('assessmentStart').style.display='block';
+}
+function renderQuestion() {
+  const q = assessQuestions[currentQ];
+  document.getElementById('currentQ').textContent = currentQ+1;
+  document.getElementById('assessProgress').style.width = ((currentQ+1)/8*100)+'%';
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('questionSub').textContent = q.sub;
+  const ol = document.getElementById('optionsList');
+  ol.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const d = document.createElement('div');
+    d.className='assessment-option';
+    d.innerHTML=`<div class="radio-dot"></div><span style="font-size:13.5px;">${opt}</span>`;
+    d.onclick=()=>{
+      document.querySelectorAll('.assessment-option').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected'); selectedOpt=i;
+      const nb=document.getElementById('nextBtn'); nb.disabled=false; nb.style.opacity='1';
+    };
+    ol.appendChild(d);
+  });
+  selectedOpt=null;
+  const nb=document.getElementById('nextBtn'); nb.disabled=true; nb.style.opacity='0.5';
+  nb.textContent = currentQ===7 ? 'Lihat Hasil ✅' : 'Lanjutkan →';
+}
+function nextQuestion() {
+  if (selectedOpt===null) return;
+  assessScores.push(assessQuestions[currentQ].scores[selectedOpt]);
+  if (currentQ<7) { currentQ++; renderQuestion(); }
+  else showAssessmentResult();
+}
+function showAssessmentResult() {
+  document.getElementById('assessmentQuiz').style.display='none';
+  document.getElementById('assessmentResult').style.display='block';
+  const total = assessScores.reduce((a,b)=>a+b,0);
+  const score = Math.round(total/assessScores.length*10);
+  let label,desc,rec,deg,color;
+  if (score>=80) { label='Sangat Baik 🌟';desc='Kondisi mental kamu sangat baik! Pertahankan kebiasaan positif.';color='var(--success)';deg=Math.round(score/100*360);rec=['Lanjutkan latihan meditasi','Tetap jaga pola tidur','Bagikan energi positifmu!'];}
+  else if (score>=65) { label='Baik 😊';desc='Kondisi cukup baik, ada beberapa area yang bisa ditingkatkan.';color='var(--primary)';deg=Math.round(score/100*360);rec=['Coba latihan pernapasan harian','Journaling setiap hari','Bangun support system'];}
+  else if (score>=50) { label='Cukup 😐';desc='Kamu mengalami beberapa tantangan emosi. Jangan sendirian!';color='var(--warning)';deg=Math.round(score/100*360);rec=['Latihan mindfulness 5 menit','Coba ngobrol dengan AI Assistant','Baca materi self-care'];}
+  else { label='Perlu Perhatian 😔';desc='Kondisi mentalmu memerlukan perhatian lebih. Ada kami di sini.';color='var(--danger)';deg=Math.round(score/100*360);rec=['Hubungi psikolog profesional','Coba 4-7-8 breathing sekarang','Bergabung ke komunitas kami'];}
+  App.currentUser.assessmentScore = score;
+  saveCurrentUser();
+  updateStats();
+  document.getElementById('resultScoreCircle').innerHTML=`<div class="score-circle" style="background:conic-gradient(${color} 0deg,${color} ${deg}deg,rgba(124,92,191,0.15) ${deg}deg 360deg);">
+    <div class="score-inner"><div class="score-num">${score}</div><div class="score-label">${label}</div></div></div>`;
+  document.getElementById('resultDescription').textContent=desc;
+  document.getElementById('resultRecommendations').innerHTML=`<div class="section-title" style="font-size:14px;">💡 Rekomendasi untukmu</div>${rec.map(r=>`<div style="padding:10px 14px;background:var(--bg-card2);border-radius:10px;font-size:13px;margin-bottom:8px;border-left:3px solid var(--primary);">✓ ${r}</div>`).join('')}`;
+  // Update last result card
+  document.getElementById('lastResultCard').style.display='block';
+  document.getElementById('lastScoreNum').textContent=score;
+  document.getElementById('lastScoreLabel').textContent=label;
+  document.getElementById('lastScoreDesc').textContent=desc;
+  showNotif('✅ Assessment selesai!','Skor kamu: '+score+' — '+label);
+}
+function resetAssessment() {
+  document.getElementById('assessmentResult').style.display='none';
+  document.getElementById('assessmentStart').style.display='block';
+}
+
+// ===== TIMER =====
+const breathInstructions = ['Tarik napas dalam...','Tahan napas...','Hembuskan perlahan...','Rileks sejenak...'];
+let breathIdx=0;
+function startMeditationTimer(name, seconds, goPage) {
+  App.timer.name=name; App.timer.total=seconds; App.timer.current=seconds; App.timer.running=false;
+  clearInterval(App.timer.interval);
+  document.getElementById('meditationTitle').textContent=name;
+  document.getElementById('meditationSub').textContent=Math.round(seconds/60)+' menit';
+  document.getElementById('timerDisplay').textContent=formatTime(seconds);
+  document.getElementById('timerBtn').textContent='▶ Mulai';
+  document.getElementById('timerStatus').textContent='Tekan mulai untuk memulai sesi';
+  updateTimerCircle();
+  if (goPage) showPage(goPage, document.querySelector('.nav-item:nth-child(6)'));
+  showNotif('🧘 '+name,'Sesi latihan siap dimulai!');
+}
+function formatTime(s) { return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function updateTimerCircle() {
+  const prog=1-(App.timer.current/App.timer.total);
+  const deg=Math.round(prog*360);
+  document.getElementById('timerCircle').style.background=`conic-gradient(var(--primary) 0deg,var(--secondary) ${deg}deg,rgba(124,92,191,0.1) ${deg}deg 360deg)`;
+}
+function toggleTimer() {
+  if (App.timer.running) {
+    clearInterval(App.timer.interval); App.timer.running=false;
+    document.getElementById('timerBtn').textContent='▶ Lanjutkan';
+    document.getElementById('timerStatus').textContent='Dijeda';
+  } else {
+    App.timer.running=true;
+    document.getElementById('timerBtn').textContent='⏸ Jeda';
+    let bc=0;
+    App.timer.interval=setInterval(()=>{
+      App.timer.current--;
+      document.getElementById('timerDisplay').textContent=formatTime(App.timer.current);
+      updateTimerCircle(); bc++;
+      if(bc%4===0){breathIdx=(breathIdx+1)%4;document.getElementById('timerInstruction').textContent=breathInstructions[breathIdx];}
+      if(App.timer.current<=0){
+        clearInterval(App.timer.interval); App.timer.running=false;
+        document.getElementById('timerBtn').textContent='✅ Selesai!';
+        document.getElementById('timerStatus').textContent='🎉 Latihan selesai! Kerja bagus!';
+        document.getElementById('timerInstruction').textContent='Selesai! 🎉';
+        App.currentUser.exercises++;
+        saveCurrentUser(); updateStats();
+        showNotif('🎉 Latihan selesai!',App.timer.name+' berhasil diselesaikan! +1 latihan 💪');
+      }
+    },1000);
+  }
+}
+function resetTimer() {
+  clearInterval(App.timer.interval); App.timer.running=false; App.timer.current=App.timer.total;
+  document.getElementById('timerDisplay').textContent=formatTime(App.timer.current);
+  document.getElementById('timerBtn').textContent='▶ Mulai';
+  document.getElementById('timerStatus').textContent='Tekan mulai untuk memulai sesi';
+  document.getElementById('timerInstruction').textContent='Tarik napas dalam...';
+  updateTimerCircle();
+}
+
+// ===== 4-7-8 BREATHING =====
+let breathCycle=0, breathPhase='in', breathCountdown=4, breathTimer=null;
+function openBreathingGuide() {
+  document.getElementById('breathModal').classList.add('show');
+  breathCycle=0; breathPhase='in'; breathCountdown=4;
+  document.getElementById('breathCount').textContent='4';
+  document.getElementById('breathPhase').textContent='Tarik Napas';
+  document.getElementById('breathCycleNum').textContent='0';
+  const c=document.getElementById('breathCircle');
+  c.style.transform='scale(1)'; c.style.background='rgba(124,92,191,0.2)';
+}
+function closeBreath() {
+  clearInterval(breathTimer); breathTimer=null;
+  document.getElementById('breathModal').classList.remove('show');
+  document.getElementById('breathStartBtn').style.display='';
+  document.getElementById('breathStopBtn').style.display='none';
+}
+function startBreathing() {
+  document.getElementById('breathStartBtn').style.display='none';
+  document.getElementById('breathStopBtn').style.display='';
+  breathPhase='in'; breathCountdown=4;
+  const c=document.getElementById('breathCircle');
+  c.style.transition='all 4s ease'; c.style.transform='scale(1.4)'; c.style.background='rgba(124,92,191,0.4)';
+  document.getElementById('breathPhase').textContent='Tarik Napas';
+  breathTimer=setInterval(()=>{
+    breathCountdown--;
+    document.getElementById('breathCount').textContent=breathCountdown;
+    if(breathCountdown<=0){
+      if(breathPhase==='in'){breathPhase='hold';breathCountdown=7;c.style.transition='none';document.getElementById('breathPhase').textContent='Tahan';}
+      else if(breathPhase==='hold'){breathPhase='out';breathCountdown=8;c.style.transition='all 8s ease';c.style.transform='scale(1)';c.style.background='rgba(124,92,191,0.1)';document.getElementById('breathPhase').textContent='Hembuskan';}
+      else{breathPhase='in';breathCountdown=4;breathCycle++;document.getElementById('breathCycleNum').textContent=breathCycle;
+        c.style.transition='all 4s ease';c.style.transform='scale(1.4)';c.style.background='rgba(124,92,191,0.4)';
+        document.getElementById('breathPhase').textContent='Tarik Napas';
+        if(breathCycle>=4){stopBreathing();showNotif('🫁 Latihan selesai!','4 siklus 4-7-8 breathing selesai! 🌟');}
+      }
+    }
+  },1000);
+}
+function stopBreathing() {
+  clearInterval(breathTimer); breathTimer=null;
+  document.getElementById('breathStartBtn').style.display='';
+  document.getElementById('breathStopBtn').style.display='none';
+  document.getElementById('breathCircle').style.transform='scale(1)';
+  document.getElementById('breathCircle').style.background='rgba(124,92,191,0.2)';
+  document.getElementById('breathCount').textContent='4';
+  document.getElementById('breathPhase').textContent='Tarik Napas';
+  breathCycle=0; document.getElementById('breathCycleNum').textContent='0';
+}
+
+// ===== JOURNAL =====
+function saveJournal() {
+  const text = document.getElementById('journalText').value.trim();
+  if (!text) { showNotif('⚠️ Oops!','Jurnal tidak boleh kosong.'); return; }
+  const mood = document.getElementById('journalMood').value;
+  App.currentUser.journals.push({ text, mood, time: new Date().toISOString() });
+  saveCurrentUser(); updateStats(); renderJournalHistory();
+  document.getElementById('journalText').value='';
+  showNotif('📔 Jurnal disimpan!','Refleksimu berhasil dicatat. +1 jurnal ✨');
+}
+function renderJournalHistory() {
+  const el = document.getElementById('journalHistory');
+  if (!el) return;
+  const journals = App.currentUser.journals.slice().reverse().slice(0,5);
+  if (journals.length===0) { el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">Belum ada jurnal. Mulai tulis hari ini! 📔</div>'; return; }
+  el.innerHTML=journals.map(j=>`<div class="journal-entry"><div class="journal-date">${new Date(j.time).toLocaleString('id-ID',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div><div class="journal-text">${j.text.substring(0,120)}${j.text.length>120?'...':''}</div><div class="journal-mood-tag">${j.mood}</div></div>`).join('');
+}
+
+// ===== GRATITUDE =====
+function saveGratitude() {
+  const g1=document.getElementById('grat1').value.trim();
+  const g2=document.getElementById('grat2').value.trim();
+  const g3=document.getElementById('grat3').value.trim();
+  const feeling=document.getElementById('gratFeeling').value.trim();
+  if(!g1&&!g2&&!g3){showNotif('⚠️ Isi minimal satu syukur ya!','');return;}
+  const items=[g1,g2,g3].filter(Boolean);
+  App.currentUser.gratitudes.push({items,feeling,time:new Date().toISOString()});
+  App.currentUser.streak++;
+  saveCurrentUser();
+  renderGratitudeHistory();
+  document.getElementById('grat1').value='';
+  document.getElementById('grat2').value='';
+  document.getElementById('grat3').value='';
+  document.getElementById('gratFeeling').value='';
+  document.getElementById('gratStreak').textContent=App.currentUser.streak;
+  showNotif('🙏 Jurnal syukur tersimpan!','Kamu luar biasa sudah bersyukur hari ini! 🌟');
+}
+function renderGratitudeHistory() {
+  const gratStreak = document.getElementById('gratStreak');
+  if (gratStreak) gratStreak.textContent = App.currentUser.streak;
+  const el=document.getElementById('gratitudeHistory');
+  if(!el) return;
+  const grts=App.currentUser.gratitudes.slice().reverse().slice(0,5);
+  if(grts.length===0){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">Belum ada entri. Mulai bersyukur hari ini! 🙏</div>';return;}
+  el.innerHTML=grts.map(g=>`<div class="gratitude-item"><div class="gi-emoji">🌟</div><div class="gi-text">${g.items.join(' · ')}</div><div class="gi-date">${new Date(g.time).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</div></div>`).join('');
+}
+
+// ===== ARTICLES =====
+const articleContents={
+  'Cara Mengatasi Overthinking':{emoji:'🌀',content:`Overthinking adalah kebiasaan memikirkan sesuatu terlalu dalam hingga mengganggu ketenangan. Berikut teknik efektif:\n\n1. Teknik 5-4-3-2-1\nSaat pikiran berputar, fokus pada: 5 hal yang kamu lihat, 4 hal yang kamu rasakan, 3 hal yang kamu dengar, 2 hal yang kamu cium, 1 hal yang kamu rasakan di mulut.\n\n2. Journaling\nTuliskan semua pikiran yang mengganggu. Ini memindahkan beban pikiran keluar dari kepala.\n\n3. Tetapkan "Waktu Khawatir"\nJadwalkan 15 menit khusus untuk memikirkan masalah. Di luar itu, izinkan dirimu tidak khawatir.\n\n4. Latihan Pernapasan\nNapas 4-7-8: tarik 4 detik, tahan 7 detik, hembuskan 8 detik.\n\nIngat: satu langkah kecil sudah cukup untuk hari ini. 💜`},
+  'Teknik Mengelola Emosi':{emoji:'💪',content:`Emosi adalah bagian alami dari pengalaman manusia.\n\n1. Kenali dan Beri Nama Emosi\n"Aku marah" atau "Aku sedih" membantu otak memproses emosi lebih baik.\n\n2. Teknik STOP\n• Stop: Berhenti sejenak\n• Take a breath: Tarik napas\n• Observe: Amati perasaanmu\n• Proceed: Lanjutkan dengan bijak\n\n3. Ekspresikan Secara Sehat\nMenulis, melukis, berolahraga, atau berbicara dengan seseorang yang dipercaya.\n\n4. Validasi Emosi Sendiri\nJangan menghakimi perasaanmu. Semua emosi valid.\n\nIngat: mengelola emosi bukan menghilangkannya, tapi meresponsnya dengan sehat. 💪`},
+  'Mindfulness untuk Pemula':{emoji:'🧘',content:`Mindfulness adalah praktik hadir sepenuhnya di momen ini.\n\n1. Meditasi 5 Menit\nDuduk nyaman, tutup mata, fokus pada napas. Saat pikiran melayang, kembalikan perlahan ke napas.\n\n2. Body Scan\nBerbaring nyaman. Perhatikan setiap bagian tubuh dari kaki ke kepala.\n\n3. Mindful Eating\nMakan perlahan, perhatikan rasa, tekstur, dan aroma makanan.\n\n4. Mindful Walking\nBerjalan pelan, rasakan setiap langkah.\n\nManfaat:\n✅ Mengurangi stres\n✅ Meningkatkan fokus\n✅ Memperbaiki tidur\n✅ Meningkatkan kesehatan emosional`},
+  'Self Love & Percaya Diri':{emoji:'💜',content:`Self-love bukan tentang narsis, melainkan menerima dan menghargai dirimu.\n\n1. Berbicara Baik pada Diri Sendiri\n"Aku tidak bisa" → "Aku belum bisa, tapi aku sedang belajar"\n\n2. Tetapkan Batasan yang Sehat\nBelajar berkata tidak pada hal yang menguras energimu.\n\n3. Rayakan Pencapaian Kecil\nSetiap progres layak dirayakan.\n\n4. Rawat Tubuh dan Pikiranmu\nTidur cukup, makan bergizi, olahraga, luangkan waktu untuk hal yang menyenangkan.\n\n5. Berhenti Membandingkan Diri\nPerjalananmu unik. Focus on your own growth! 🌱`},
+  'Mengatasi Burnout':{emoji:'🔥',content:`Burnout adalah kelelahan fisik, emosional, dan mental akibat stres berkepanjangan.\n\nTanda-tanda:\n• Kelelahan ekstrem meski sudah tidur\n• Sinis dan tidak peduli\n• Merasa tidak efektif\n• Fisik sering sakit\n\nStrategi Pemulihan:\n\n1. Istirahat Total\nIzinkan diri beristirahat tanpa rasa bersalah.\n\n2. Batasi Paparan Stressor\nKurangi beban kerja, minta bantuan.\n\n3. Reconnect dengan Diri\nLakukan aktivitas yang memberi energi.\n\n4. Support System\nJangan menanggung semuanya sendiri.\n\n5. Cari Bantuan Profesional\nKonsultasi dengan psikolog jika perlu.`},
+  'Pola Tidur & Kesehatan Mental':{emoji:'😴',content:`Tidur dan kesehatan mental saling mempengaruhi.\n\nMengapa Tidur Penting?\n• Otak memproses emosi saat tidur\n• Regenerasi sel dan sistem imun\n• Konsolidasi memori\n\nTips Tidur Berkualitas:\n\n1. Konsisten Waktu Tidur\nTidur dan bangun di waktu yang sama setiap hari.\n\n2. Rutinitas Sebelum Tidur\n30 menit sebelum tidur: hindari layar, coba membaca atau meditasi.\n\n3. Lingkungan Tidur Optimal\nKamar gelap, sejuk, dan tenang.\n\n4. Batasi Kafein\nHindari kafein setelah jam 2 siang.\n\n5. Kelola Kecemasan Malam\nJika sulit tidur, coba journaling atau 4-7-8 breathing.`},
+  'Mengatasi Social Anxiety':{emoji:'🦋',content:`Social anxiety adalah kecemasan yang berlebihan dalam situasi sosial.\n\nTanda-tanda:\n• Takut dihakimi orang lain\n• Menghindari situasi sosial\n• Gemetar, keringat berlebih\n• Pikiran negatif tentang diri sendiri\n\nStrategi Mengatasi:\n\n1. Eksposur Bertahap\nMulai dari situasi sosial yang kecil, tingkatkan perlahan.\n\n2. Tantang Pikiran Negatif\n"Orang akan menertawakanku" → "Orang sibuk dengan urusan mereka sendiri"\n\n3. Fokus ke Luar, Bukan ke Dalam\nFokus pada percakapan, bukan pada dirimu sendiri.\n\n4. Persiapan\nPersiapkan topik pembicaraan atau pertanyaan terlebih dahulu.\n\n5. Self-Compassion\nBersikap lembut pada dirimu sendiri. Semua orang pernah canggung!`}
+};
+function filterArticles(val){document.querySelectorAll('.article-card').forEach(a=>{a.style.display=a.innerText.toLowerCase().includes(val.toLowerCase())?'':'none';});}
+function filterTag(tag,el){
+  document.querySelectorAll('#page-materi .tab-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.article-card').forEach(a=>{a.style.display=(tag==='semua'||a.innerText.toLowerCase().includes(tag))?'':'none';});
+}
+function openArticle(title){
+  const art=articleContents[title];
+  if(!art) return;
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalEmoji').textContent=art.emoji;
+  document.getElementById('modalContent').innerHTML=art.content.replace(/\n/g,'<br>');
+  document.getElementById('articleModal').classList.add('show');
+}
+function closeArticle(){document.getElementById('articleModal').classList.remove('show');}
+
+// ===== AI CHAT (powered by Claude API) =====
+function clearChat(){
+  App.chatHistory=[];
+  const msgs=document.getElementById('chatMessages');
+  msgs.innerHTML=`<div class="chat-msg bot"><div class="chat-avatar bot-av">🤖</div><div class="chat-bubble bot-bubble">Chat dibersihkan. Halo lagi ${App.currentUser?.name||''}! Apa yang ingin kamu ceritakan? 💜</div></div>`;
+  document.getElementById('quickSuggestions').style.display='flex';
+}
+function addChatMsg(text,isUser){
+  const msgs=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className='chat-msg '+(isUser?'user':'bot');
+  div.innerHTML=isUser
+    ?`<div class="chat-avatar user-av">${App.currentUser?.avatar||'😊'}</div><div class="chat-bubble user-bubble">${text}</div>`
+    :`<div class="chat-avatar bot-av">🤖</div><div class="chat-bubble bot-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+async function sendMessage(){
+  const input=document.getElementById('chatInput');
+  const btn=document.getElementById('sendBtn');
+  const text=input.value.trim();
+  if(!text) return;
+  addChatMsg(text,true);
+  input.value='';
+  document.getElementById('quickSuggestions').style.display='none';
+  btn.disabled=true;
+  // Show typing
+  const ty=document.getElementById('typingIndicator');
+  ty.classList.add('show');
+  document.getElementById('chatMessages').scrollTop=99999;
+  App.chatHistory.push({role:'user',content:text});
+  try {
+    const sysPrompt=`Kamu adalah MindCare AI, asisten kesehatan mental yang penuh empati untuk aplikasi MindCare. Kamu berbicara dalam Bahasa Indonesia yang hangat, sopan, dan mendukung. Pengguna saat ini bernama ${App.currentUser?.name||'teman'}. 
+
+Panduan penting:
+- Dengarkan dengan empati dan validasi perasaan pengguna
+- Berikan teknik praktis untuk mengelola emosi (pernapasan, journaling, mindfulness)
+- Jangan mendiagnosa penyakit mental — sarankan ke profesional jika perlu
+- Gunakan bahasa yang ramah, tidak menghakimi
+- Jaga respons sekitar 2-4 paragraf
+- Gunakan emoji sesekali untuk kehangatan
+- Jika pengguna dalam krisis, berikan hotline kesehatan mental: Hotline Kemenkes 119 ext 8`;
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:sysPrompt,
+        messages:App.chatHistory
+      })
+    });
+    const data=await resp.json();
+    const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('') || 'Maaf, aku mengalami kendala teknis. Coba lagi ya! 💜';
+    ty.classList.remove('show');
+    addChatMsg(reply,false);
+    App.chatHistory.push({role:'assistant',content:reply});
+  } catch(e) {
+    ty.classList.remove('show');
+    // Fallback responses
+    const fallbacks=['Aku di sini untukmu 💜 Ceritakan lebih lanjut ya — apa yang membuatmu merasa seperti itu?','Terima kasih sudah mau berbagi. Perasaanmu valid! Yuk coba teknik pernapasan 4-7-8 untuk sedikit menenangkan diri. Tarik napas 4 detik, tahan 7, hembuskan 8 detik.','Aku mendengarmu. Kamu sangat berani dengan mau bercerita. Satu langkah kecil sudah sangat berarti untuk kesehatan mentalmu! 🌟'];
+    addChatMsg(fallbacks[Math.floor(Math.random()*fallbacks.length)],false);
+  }
+  btn.disabled=false;
+}
+function sendQuickMsg(el){document.getElementById('chatInput').value=el.textContent.trim();sendMessage();}
+
+// ===== COMMUNITY =====
+let postTags=[];
+function addPostTag(tag){
+  if(!postTags.includes(tag)){postTags.push(tag);renderSelectedTags();}
+}
+function renderSelectedTags(){
+  const el=document.getElementById('selectedTagsDisplay');
+  el.innerHTML=postTags.map(t=>`<span class="post-tag" onclick="removePostTag('${t}')" style="cursor:pointer;">${t} ✕</span>`).join('');
+}
+function removePostTag(tag){postTags=postTags.filter(t=>t!==tag);renderSelectedTags();}
+function submitPost(){
+  const text=document.getElementById('newPostText').value.trim();
+  if(!text){showNotif('⚠️','Tuliskan perasaanmu dulu ya.');return;}
+  const feed=document.getElementById('communityFeed');
+  const div=document.createElement('div');
+  div.className='community-post';
+  const tagsHtml=postTags.map(t=>`<span class="post-tag">${t}</span>`).join('');
+  div.innerHTML=`<div class="post-author"><div class="post-anon"><i class="fas fa-user-secret"></i></div><div><div class="post-name">@kamu_anonim</div><div class="post-time">Baru saja</div></div></div>
+    <div class="post-content">${text}</div>
+    <div class="post-tags">${tagsHtml}</div>
+    <div class="post-actions"><button class="post-action-btn" onclick="likePost(this)"><i class="fas fa-heart"></i> 0</button><button class="post-action-btn"><i class="fas fa-comment"></i> 0</button></div>`;
+  feed.insertBefore(div,feed.firstChild);
+  document.getElementById('newPostText').value='';
+  postTags=[]; renderSelectedTags();
+  showNotif('✅ Postingan diterbitkan!','Postingan anonimmu berhasil dipublikasikan.');
+}
+function likePost(btn){
+  btn.classList.toggle('liked');
+  const parts=btn.innerHTML.split(' ');
+  const count=parseInt(parts[parts.length-1])||0;
+  parts[parts.length-1]=btn.classList.contains('liked')?count+1:count-1;
+  btn.innerHTML=parts.join(' ');
+}
+
+// ===== PROFILE =====
+function updateProfilePage(){
+  const u=App.currentUser;
+  document.getElementById('profileName').value=u.name||'';
+  document.getElementById('profileEmail').value=u.email||'';
+  document.getElementById('profileBio').value=u.bio||'';
+  document.getElementById('profileNameDisplay').textContent=u.name||'Pengguna';
+  document.getElementById('profileBioDisplay').textContent=u.bio||'Semangat!';
+  document.getElementById('profileAvatarBig').textContent=u.avatar||'🌸';
+  document.getElementById('profileStreakStat').textContent=u.streak||0;
+  document.getElementById('profileExStat').textContent=u.exercises||0;
+  document.getElementById('profileJournalStat').textContent=u.journals?.length||0;
+  // Mark selected avatar
+  document.querySelectorAll('#profileAvatarPicker .avatar-opt').forEach(a=>{
+    a.classList.toggle('selected',a.dataset.avatar===u.avatar);
+  });
+}
+function saveProfile(){
+  const name=document.getElementById('profileName').value.trim();
+  const email=document.getElementById('profileEmail').value.trim();
+  const bio=document.getElementById('profileBio').value.trim();
+  const avatar=document.querySelector('#profileAvatarPicker .avatar-opt.selected')?.dataset.avatar||App.currentUser.avatar;
+  if(!name){showNotif('⚠️','Nama tidak boleh kosong.');return;}
+  App.currentUser.name=name;
+  App.currentUser.bio=bio;
+  App.currentUser.avatar=avatar;
+  saveCurrentUser();
+  updateSidebar(); updateProfilePage();
+  document.getElementById('topbarAvatar').textContent=avatar;
+  showNotif('✅ Profil disimpan!','Data profilmu berhasil diperbarui.');
+}
+function toggleSetting(el,type){showNotif(el.checked?'✅ Aktif':'🔕 Nonaktif',type+' '+(el.checked?'diaktifkan':'dinonaktifkan')+'.');}
+
+// ===== ACHIEVEMENTS =====
+const allAchievements=[
+  {id:'streak7',icon:'🔥',name:'7 Hari Aktif',desc:'Aktif 7 hari berturut-turut'},
+  {id:'mindful10',icon:'🧘',name:'Mindful Master',desc:'10 sesi meditasi'},
+  {id:'journal5',icon:'📔',name:'Jurnal Expert',desc:'5 entri jurnal'},
+  {id:'grat7',icon:'🙏',name:'Grateful Soul',desc:'7 jurnal syukur'},
+  {id:'assess1',icon:'📊',name:'Self-Aware',desc:'Selesaikan 1 assessment'},
+  {id:'community1',icon:'💬',name:'Community Hero',desc:'Posting di komunitas'},
+  {id:'streak30',icon:'⭐',name:'Star Achiever',desc:'30 hari aktif'},
+  {id:'perfect',icon:'👑',name:'Mental Champion',desc:'Skor assessment 90+'},
+];
+function renderAchievements(){
+  const u=App.currentUser;
+  const grid=document.getElementById('achievementsGrid');
+  if(!grid) return;
+  // Check new achievements
+  if(u.streak>=7&&!u.achievements.includes('streak7'))u.achievements.push('streak7');
+  if(u.exercises>=10&&!u.achievements.includes('mindful10'))u.achievements.push('mindful10');
+  if(u.journals?.length>=5&&!u.achievements.includes('journal5'))u.achievements.push('journal5');
+  if(u.gratitudes?.length>=7&&!u.achievements.includes('grat7'))u.achievements.push('grat7');
+  if(u.assessmentScore&&!u.achievements.includes('assess1'))u.achievements.push('assess1');
+  if(u.assessmentScore>=90&&!u.achievements.includes('perfect'))u.achievements.push('perfect');
+  saveCurrentUser();
+  grid.innerHTML=allAchievements.map(a=>{
+    const unlocked=u.achievements?.includes(a.id);
+    return `<div class="achievement-item ${unlocked?'unlocked':'locked'}" title="${a.desc}"><div class="achievement-icon">${a.icon}</div><div class="achievement-name">${a.name}</div></div>`;
+  }).join('');
+}
+
+// ===== RESPONSIVE =====
+function checkResponsive(){document.querySelectorAll('.two-col-grid').forEach(el=>{el.style.gridTemplateColumns=window.innerWidth<650?'1fr':'';}); }
+window.addEventListener('resize',checkResponsive);
+checkResponsive();
+
+// Close modals on overlay click
+document.getElementById('articleModal').addEventListener('click',function(e){if(e.target===this)closeArticle();});
+document.getElementById('breathModal').addEventListener('click',function(e){if(e.target===this)closeBreath();});
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!checkSession()){
+    document.getElementById('loginScreen').style.display='flex';
+  }
+});
+</script>
+</body>
+</html>
